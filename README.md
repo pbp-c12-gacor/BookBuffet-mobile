@@ -98,4 +98,4 @@ Dataset yang digunakan pada aplikasi BookBuffet ini diambil dari [Google Books A
 [MIT License](https://choosealicense.com/licenses/mit/)
 
 ## Berita Acara
-https://docs.google.com/spreadsheets/d/1Ic23YkiCpGjv6V0fnoMJ2Qjn1WSERgpaC1QYX_GlgYo/edit#gid=0
+https://drive.google.com/drive/u/0/folders/1jxH4-GFrE9VZxaPqCS7C6Cq5AjS_Z78p
