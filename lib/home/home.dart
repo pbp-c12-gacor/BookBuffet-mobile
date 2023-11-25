@@ -21,7 +21,7 @@ class MyHomePage extends StatelessWidget {
           'Book Buffet',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.indigo,
+        backgroundColor: secondaryColor,
       ),
       drawer: const LeftDrawer(),
       body: Padding(

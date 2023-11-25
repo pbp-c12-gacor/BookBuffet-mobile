@@ -1,23 +1,34 @@
 import 'package:bookbuffet/home/home.dart';
+import 'package:bookbuffet/home/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+
+const primaryColor = Color(0xfff3f2ec);
+const secondaryColor = Color(0xffc4a992);
 
 void main() {
   runApp(const MyApp());
 }
 
-const color = Color(0xfff3f2ec);
-
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Book Buffet',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: color),
-        useMaterial3: true,
-      ),
-      home: MyHomePage(),
-    );
+    return Provider(
+        create: (_) {
+          CookieRequest request = CookieRequest();
+          return request;
+        },
+        child: MaterialApp(
+          title: 'Book Buffet',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
+            useMaterial3: true,
+          ),
+          // home: LoginPage(),
+          home: MyHomePage(),
+        ));
   }
 }
