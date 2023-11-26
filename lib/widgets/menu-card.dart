@@ -1,3 +1,5 @@
+import 'package:bookbuffet/forum/forum.dart';
+import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
 
 class MenuItem {
@@ -16,16 +18,16 @@ class MenuCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.indigo,
+      color: secondaryColor,
       elevation: 5.0,
       borderRadius: BorderRadius.circular(15.0),
       child: InkWell(
         borderRadius: BorderRadius.circular(15.0),
         onTap: () {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-                content: Text("Kamu telah menekan tombol ${item.name}!")));
+          if (item.name == "Forum") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ForumPage()));
+          }
         },
         child: Container(
           padding: const EdgeInsets.all(16),
