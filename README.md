@@ -5,8 +5,6 @@
   <em>📚 BookBuffet: Your Ultimate Book Database - Just Like IMDb, but for Literature! 📚   </em>
 </p>
 <p align="center">
-    <img alt="Django version" src="https://img.shields.io/static/v1?label=Django&message=%20%3E=4.2&logo=Django&color=092E20">
-    <img alt="Python version" src="https://img.shields.io/static/v1?label=Python&message=%20%3E=3.10&logo=Python&color=3776AB">
     <img alt="License" src="https://img.shields.io/github/license/pbp-c12-gacor/BookBuffet">
     <img alt="Last commit" src="https://img.shields.io/github/last-commit/pbp-c12-gacor/BookBuffet">
 </p>
