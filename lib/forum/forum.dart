@@ -1,6 +1,5 @@
 import 'package:bookbuffet/forum/models/post.dart';
 import 'package:bookbuffet/forum/screens/detail_post.dart';
-import 'package:bookbuffet/home/screens/login.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/widgets/left-drawer.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +21,12 @@ class ForumPageState extends State<ForumPage> {
   String _title = "";
   String _text = "";
 
-  Future<String> getUserById(String userId) async {
+  Future<Map<String, dynamic>> getUserById(String userId) async {
     final response = await http
         .get(Uri.parse('http://127.0.0.1:8000/forum/get-user/$userId/'));
-    // print(response.body);
     if (response.statusCode == 200) {
-      return jsonDecode(utf8.decode(response.bodyBytes))[0]['fields']
-          ['username'];
+      var user = jsonDecode(utf8.decode(response.bodyBytes))[0];
+      return {'id': user['pk'], 'username': user['fields']['username']};
     } else {
       throw Exception('Failed to load user');
     }
@@ -82,10 +80,11 @@ class ForumPageState extends State<ForumPage> {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (_, index) {
-                    return FutureBuilder<String>(
+                    return FutureBuilder<Map<String, dynamic>>(
                       future: getUserById(
                           snapshot.data![index].fields.user.toString()),
-                      builder: (context, AsyncSnapshot<String> userSnapshot) {
+                      builder: (context,
+                          AsyncSnapshot<Map<String, dynamic>> userSnapshot) {
                         if (userSnapshot.connectionState ==
                             ConnectionState.waiting) {
                           return CircularProgressIndicator();
@@ -101,7 +100,7 @@ class ForumPageState extends State<ForumPage> {
                                     MaterialPageRoute(
                                       builder: (context) => DetailPostPage(
                                         post: snapshot.data![index],
-                                        username: userSnapshot.data!,
+                                        currUser: userSnapshot.data!,
                                       ),
                                     ),
                                   );
@@ -119,13 +118,37 @@ class ForumPageState extends State<ForumPage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "${userSnapshot.data}",
-                                          style: const TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "${userSnapshot.data!["username"]}",
+                                              style: const TextStyle(
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            if (userSnapshot.data!["id"] ==
+                                                snapshot
+                                                    .data![index].fields.user)
+                                              PopupMenuButton<int>(
+                                                itemBuilder: (context) => [
+                                                  PopupMenuItem(
+                                                    value: 1,
+                                                    child: Text("Edit"),
+                                                  ),
+                                                  PopupMenuItem(
+                                                    value: 2,
+                                                    child: Text("Delete"),
+                                                  ),
+                                                ],
+                                                onSelected: (value) {
+                                                  // Handle your logic here
+                                                },
+                                              ),
+                                          ],
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
