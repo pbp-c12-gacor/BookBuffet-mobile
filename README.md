@@ -67,7 +67,7 @@ Pada tampilan My Books aplikasi BookBuffet, Pengguna bisa menyimpan _list_ buku 
 
 ### ❗ Report Book ❗
 #### Dikerjakan oleh : Fiona Ratu Maheswari
-Pengguna _role_ `User` memiliki opsi untuk me-_report_ buku agar dapat di-_remove_ dari katalog buku. Pengguna akan memilih buku yang ingin di-_report_. Lalu, Pengguna wajib memberi alasan mengapa buku tersebut harus di-_remove_. Report tersebut lalu akan di-_review_ oleh `Admin` dimana ia akan mengambil keputusan apakah buku tersebut akan di-_remove_ atau tidak. User akan menerima notifikasi mengenai _report_-nya diterima `Admin` atau tidak.
+Pengguna _role_ `User` dan `Admin` memiliki opsi untuk me-_report_ buku agar dapat ditinjau ulang oleh `Admin`. Pengguna akan memilih buku yang ingin di-_report_. Lalu, Pengguna wajib memberi alasan mengapa buku tersebut di-_report_. Report tersebut lalu akan di-_review_ oleh `Admin`. Selain itu, `Admin` juga bisa menghapus _report_ yang dibuat oleh `User` maupun `Admin`.
 
 ## 🗺️ Sumber Dataset Katalog Buku 🗺️
 Dataset yang digunakan pada aplikasi BookBuffet ini diambil dari [Google Books API](https://developers.google.com/books/docs/v1/using). Dataset ini berisi informasi mengenai buku-buku yang ada di Google Books. Dataset ini berisi informasi mengenai judul buku, penulis, tanggal publikasi, _rating_, dan deskripsi buku. Dataset ini juga berisi _cover_ buku yang dapat digunakan sebagai _thumbnail_ pada aplikasi BookBuffet.
