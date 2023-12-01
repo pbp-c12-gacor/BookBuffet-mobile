@@ -1,4 +1,4 @@
-import 'package:bookbuffet/forum/forum.dart';
+import 'package:bookbuffet/forum/screens/forum.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
 

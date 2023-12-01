@@ -1,6 +1,7 @@
 import 'package:bookbuffet/forum/models/post.dart';
 import 'package:bookbuffet/forum/screens/detail_post.dart';
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/widgets/bottom_bar.dart';
 import 'package:bookbuffet/widgets/left-drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -59,7 +60,7 @@ class ForumPageState extends State<ForumPage> {
         title: const Text('Book Buffet'),
         backgroundColor: secondaryColor,
       ),
-      drawer: const LeftDrawer(),
+      bottomNavigationBar: BottomBar(),
       body: FutureBuilder<List<Post>>(
           future: fetchPost(),
           builder: (context, AsyncSnapshot<List<Post>> snapshot) {
