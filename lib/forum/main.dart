@@ -16,9 +16,8 @@ class _ForumPagesState extends State<ForumPages> {
       appBar: AppBar(
         title: const Text('Book Buffet'),
         backgroundColor: secondaryColor,
-        
       ),
-      body: ,
+      // body: ,
       bottomNavigationBar: const BottomBar(),
     );
   }
