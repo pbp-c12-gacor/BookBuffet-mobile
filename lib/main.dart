@@ -1,3 +1,4 @@
+import 'package:bookbuffet/forum/screens/forum.dart';
 import 'package:bookbuffet/home/home.dart';
 import 'package:bookbuffet/home/screens/login.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +24,13 @@ class MyApp extends StatelessWidget {
         },
         child: MaterialApp(
           title: 'Book Buffet',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
             useMaterial3: true,
           ),
-          // home: LoginPage(),
-          home: MyHomePage(),
+          home: LoginPage(),
+          // home: MyHomePage(),
         ));
   }
 }

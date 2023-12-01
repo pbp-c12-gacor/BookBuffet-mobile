@@ -1,4 +1,5 @@
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/widgets/bottom_bar.dart';
 import 'package:bookbuffet/widgets/left-drawer.dart';
 import 'package:bookbuffet/widgets/menu-card.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,6 @@ class MyHomePage extends StatelessWidget {
         ),
         backgroundColor: secondaryColor,
       ),
-      drawer: const LeftDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -55,6 +55,7 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
