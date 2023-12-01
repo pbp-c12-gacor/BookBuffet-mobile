@@ -1,4 +1,5 @@
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class CatalogPage extends StatelessWidget {
@@ -7,12 +8,8 @@ class CatalogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Book Buffet'),
-        backgroundColor: secondaryColor,
-      ),
-      body: Column(
-        children: [Text("Catalog")],
+      body: Container(
+        child: Text("dwadwa"),
       ),
     );
   }

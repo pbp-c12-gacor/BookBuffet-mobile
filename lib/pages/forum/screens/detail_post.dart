@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:bookbuffet/forum/models/comment.dart';
-import 'package:bookbuffet/forum/models/post.dart';
-import 'package:bookbuffet/forum/screens/comment_form.dart';
+import 'package:bookbuffet/pages/forum/models/comment.dart';
+import 'package:bookbuffet/pages/forum/models/post.dart';
+import 'package:bookbuffet/pages/forum/screens/comment_form.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
