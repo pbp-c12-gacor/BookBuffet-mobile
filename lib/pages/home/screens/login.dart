@@ -1,5 +1,5 @@
-import 'package:bookbuffet/home/home.dart';
-import 'package:bookbuffet/home/screens/register.dart';
+import 'package:bookbuffet/pages/home/screens/home.dart';
+import 'package:bookbuffet/pages/home/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';

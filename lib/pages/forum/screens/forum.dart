@@ -1,5 +1,5 @@
-import 'package:bookbuffet/forum/models/post.dart';
-import 'package:bookbuffet/forum/screens/detail_post.dart';
+import 'package:bookbuffet/pages/forum/models/post.dart';
+import 'package:bookbuffet/pages/forum/screens/detail_post.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/widgets/bottom_bar.dart';
 import 'package:bookbuffet/widgets/left-drawer.dart';
@@ -56,11 +56,6 @@ class ForumPageState extends State<ForumPage> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Book Buffet'),
-        backgroundColor: secondaryColor,
-      ),
-      bottomNavigationBar: BottomBar(),
       body: FutureBuilder<List<Post>>(
           future: fetchPost(),
           builder: (context, AsyncSnapshot<List<Post>> snapshot) {
