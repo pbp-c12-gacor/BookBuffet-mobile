@@ -1,6 +1,7 @@
 import 'package:bookbuffet/controller/bottom_bar.dart';
 import 'package:bookbuffet/pages/home/screens/home.dart';
 import 'package:bookbuffet/pages/base.dart';
+import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
