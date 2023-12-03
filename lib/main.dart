@@ -1,6 +1,9 @@
-import 'package:bookbuffet/home/home.dart';
-import 'package:bookbuffet/home/screens/login.dart';
+import 'package:bookbuffet/controller/bottom_bar.dart';
+import 'package:bookbuffet/pages/home/screens/home.dart';
+import 'package:bookbuffet/pages/base.dart';
+import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(BottomBarController());
     return Provider(
         create: (_) {
           CookieRequest request = CookieRequest();
@@ -23,12 +27,15 @@ class MyApp extends StatelessWidget {
         },
         child: MaterialApp(
           title: 'Book Buffet',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
             useMaterial3: true,
           ),
-          home: LoginPage(),
+
+          // home: LoginPage(),
           // home: MyHomePage(),
+          home: BasePage(),
         ));
   }
 }

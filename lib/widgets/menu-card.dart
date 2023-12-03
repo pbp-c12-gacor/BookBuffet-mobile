@@ -1,5 +1,9 @@
-import 'package:bookbuffet/forum/forum.dart';
+import 'package:bookbuffet/pages/MyBooks/main.dart';
+import 'package:bookbuffet/pages/catalog/main.dart';
+import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/pages/publish/main.dart';
+import 'package:bookbuffet/pages/report/main.dart';
 import 'package:flutter/material.dart';
 
 class MenuItem {
@@ -27,6 +31,18 @@ class MenuCard extends StatelessWidget {
           if (item.name == "Forum") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const ForumPage()));
+          } else if (item.name == "My Books") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const MyBooksPage()));
+          } else if (item.name == "Catalog") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const CatalogPage()));
+          } else if (item.name == "Publish Book") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const PublishPage()));
+          } else if (item.name == "Report Book") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ReportPage()));
           }
         },
         child: Container(
