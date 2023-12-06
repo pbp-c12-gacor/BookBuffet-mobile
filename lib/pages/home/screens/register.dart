@@ -1,4 +1,4 @@
-import 'package:bookbuffet/home/screens/login.dart';
+import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';

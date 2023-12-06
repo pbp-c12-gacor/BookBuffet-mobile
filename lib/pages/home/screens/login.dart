@@ -1,5 +1,6 @@
-import 'package:bookbuffet/home/home.dart';
-import 'package:bookbuffet/home/screens/register.dart';
+import 'package:bookbuffet/pages/base.dart';
+import 'package:bookbuffet/pages/home/screens/home.dart';
+import 'package:bookbuffet/pages/home/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -76,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   String uname = response['username'];
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => MyHomePage()),
+                    MaterialPageRoute(builder: (context) => BasePage()),
                   );
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()

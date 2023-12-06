@@ -7,10 +7,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Book Buffet'),
-        backgroundColor: secondaryColor,
-      ),
       body: Column(
         children: [Text("Profile")],
       ),
