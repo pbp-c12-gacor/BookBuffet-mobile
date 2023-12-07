@@ -1,7 +1,9 @@
 import 'package:bookbuffet/controller/bottom_bar.dart';
+import 'package:bookbuffet/pages/home/screens/register.dart';
 import 'package:bookbuffet/pages/home/screens/home.dart';
 import 'package:bookbuffet/pages/base.dart';
 import 'package:bookbuffet/pages/home/screens/login.dart';
+import 'package:bookbuffet/pages/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -33,8 +35,9 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           // home: LoginPage(),
-          // home: MyHomePage(),
-          home: BasePage(),
+          home: RegisterPage(),
+          // home: BasePage(),
+          // home: ProfilePage(),
         ));
   }
 }
