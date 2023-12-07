@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -86,22 +87,14 @@ class _CommentFormState extends State<CommentForm> {
                                 }),
                               );
                               if (response['status'] == 'success') {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text("Produk baru berhasil disimpan!"),
-                                  ),
-                                );
+                                showCustomSnackBar(
+                                    context, "Comment created successfully");
                                 _commentController.text = "";
                                 widget.refreshController
                                     .add(null); // Refresh the comments
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        "Terdapat kesalahan, silakan coba lagi."),
-                                  ),
-                                );
+                                showCustomSnackBar(
+                                    context, "Oops, something went wrong");
                               }
                             }
                           },

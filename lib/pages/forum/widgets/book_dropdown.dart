@@ -89,6 +89,7 @@ class _ModalBookState extends State<DropdownBook> {
                         onPressed: () {
                           setState(() {
                             dropdownValue = null;
+                            widget.onBookSelected!(null);
                           });
                         },
                       ),
