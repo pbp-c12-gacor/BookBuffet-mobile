@@ -5,8 +5,24 @@ import 'package:bookbuffet/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BasePage extends StatelessWidget {
-  const BasePage({super.key});
+class BasePage extends StatefulWidget {
+  final int initialIndex;
+
+  const BasePage({Key? key, this.initialIndex = 0}) : super(key: key);
+
+  @override
+  _BasePageState createState() => _BasePageState();
+}
+
+class _BasePageState extends State<BasePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,11 @@
-import 'package:bookbuffet/controller/bottom_bar.dart';
 import 'package:bookbuffet/pages/forum/models/post.dart';
 import 'package:bookbuffet/pages/forum/screens/detail_post.dart';
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/pages/forum/utils/time_difference_formatter.dart';
 import 'package:bookbuffet/pages/forum/widgets/category_dropdown.dart';
 import 'package:bookbuffet/pages/forum/widgets/book_dropdown.dart';
+import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -60,7 +60,8 @@ class ForumPageState extends State<ForumPage> {
     IdBookSelected = book;
   }
 
-  void refreshPosts() {
+  void refreshPosts() async {
+    posts = await fetchPost(null);
     setState(() {});
   }
 
@@ -84,6 +85,8 @@ class ForumPageState extends State<ForumPage> {
         posts.add(Post.fromJson(d));
       }
     }
+    // Reverse the list of posts
+    posts = posts.reversed.toList();
     return posts;
   }
 
@@ -168,15 +171,34 @@ class ForumPageState extends State<ForumPage> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(
-                                                  "${userSnapshot.data!["username"]}",
-                                                  style: const TextStyle(
-                                                    fontSize: 18.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
+                                                RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text:
+                                                            "${userSnapshot.data!["username"]}",
+                                                        style: const TextStyle(
+                                                          fontSize: 18.0,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text:
+                                                            " · ${formatTimeDifference(posts[index].fields.dateAdded)}",
+                                                        style: const TextStyle(
+                                                          fontSize:
+                                                              14.0, // Ukuran font lebih kecil dari username
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                if (userSnapshot.data!["id"] ==
+                                                if (request.jsonData["id"] ==
                                                     posts[index].fields.user)
                                                   PopupMenuButton<int>(
                                                     itemBuilder: (context) => [
@@ -200,14 +222,25 @@ class ForumPageState extends State<ForumPage> {
                                                           context: context,
                                                           isScrollControlled:
                                                               true,
-                                                          shape: Border.all(),
+                                                          clipBehavior: Clip
+                                                              .antiAliasWithSaveLayer,
+                                                          shape:
+                                                              const RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        20),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        20)),
+                                                          ),
                                                           builder: (context) =>
                                                               Container(
-                                                            height:
-                                                                MediaQuery.of(
+                                                            height: MediaQuery.of(
                                                                         context)
                                                                     .size
-                                                                    .height,
+                                                                    .height -
+                                                                100,
                                                             child: Scaffold(
                                                               appBar: AppBar(
                                                                 leading:
@@ -223,64 +256,56 @@ class ForumPageState extends State<ForumPage> {
                                                                   },
                                                                 ),
                                                                 actions: [
-                                                                  ElevatedButton(
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      backgroundColor:
-                                                                          secondaryColor,
-                                                                    ),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(
+                                                                        right:
+                                                                            10),
                                                                     child:
-                                                                        const Text(
-                                                                      'Edit',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
+                                                                        ElevatedButton(
+                                                                      style: ElevatedButton
+                                                                          .styleFrom(
+                                                                        backgroundColor:
+                                                                            secondaryColor,
                                                                       ),
-                                                                    ),
-                                                                    onPressed:
-                                                                        () async {
-                                                                      if (_formKey
-                                                                          .currentState!
-                                                                          .validate()) {
-                                                                        final response =
-                                                                            await request.postJson(
-                                                                          "http://127.0.0.1:8000/forum/edit-post-flutter/${posts[index].pk}/",
-                                                                          jsonEncode(<String,
-                                                                              String>{
-                                                                            'title':
-                                                                                _title,
-                                                                            'text':
-                                                                                _text,
-                                                                          }),
-                                                                        );
-                                                                        if (response['status'] ==
-                                                                            'success') {
-                                                                          ScaffoldMessenger.of(context)
-                                                                              .showSnackBar(
-                                                                            const SnackBar(
-                                                                              content: Text("Post berhasil diperbarui!"),
-                                                                            ),
+                                                                      child:
+                                                                          const Text(
+                                                                        'Edit',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () async {
+                                                                        if (_formKey
+                                                                            .currentState!
+                                                                            .validate()) {
+                                                                          final response =
+                                                                              await request.postJson(
+                                                                            "http://127.0.0.1:8000/forum/edit-post-flutter/${posts[index].pk}/",
+                                                                            jsonEncode(<String,
+                                                                                String>{
+                                                                              'title': _title,
+                                                                              'text': _text,
+                                                                            }),
                                                                           );
-                                                                          setState(
-                                                                              () {
-                                                                            fetchPost(null); // Memanggil fetchPost lagi untuk memperbarui daftar post
-                                                                          });
-                                                                          Navigator.pop(
-                                                                              context); // Menutup modal
-                                                                        } else {
-                                                                          ScaffoldMessenger.of(context)
-                                                                              .showSnackBar(
-                                                                            const SnackBar(
-                                                                              content: Text("Terdapat kesalahan, silakan coba lagi."),
-                                                                            ),
-                                                                          );
+                                                                          if (response['status'] ==
+                                                                              'success') {
+                                                                            showCustomSnackBar(context,
+                                                                                "Post is successfully updated");
+                                                                            refreshPosts();
+                                                                            Navigator.pop(context); // Menutup modal
+                                                                          } else {
+                                                                            showCustomSnackBar(context,
+                                                                                "Oops, something went wrong");
+                                                                          }
                                                                         }
-                                                                      }
-                                                                    },
-                                                                  ),
+                                                                      },
+                                                                    ),
+                                                                  )
                                                                 ],
                                                               ),
                                                               body: Form(
@@ -320,7 +345,7 @@ class ForumPageState extends State<ForumPage> {
                                                                               },
                                                                               validator: (String? value) {
                                                                                 if (value == null || value.isEmpty) {
-                                                                                  return "Nama tidak boleh kosong!";
+                                                                                  return "Name can't be empty!";
                                                                                 }
                                                                                 return null;
                                                                               },
@@ -346,7 +371,7 @@ class ForumPageState extends State<ForumPage> {
                                                                               },
                                                                               validator: (String? value) {
                                                                                 if (value == null || value.isEmpty) {
-                                                                                  return "Nama tidak boleh kosong!";
+                                                                                  return "Content can't be empty!";
                                                                                 }
                                                                                 return null;
                                                                               },
@@ -378,25 +403,14 @@ class ForumPageState extends State<ForumPage> {
                                                         if (response
                                                                 .statusCode ==
                                                             200) {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  const SnackBar(
-                                                            content: Text(
-                                                                "Post baru berhasil dihapus!"),
-                                                          ));
-                                                          setState(() {
-                                                            fetchPost(
-                                                                null); // Memanggil fetchPost lagi untuk memperbarui daftar post
-                                                          });
+                                                          showCustomSnackBar(
+                                                              context,
+                                                              "Post is deleted successfully");
+                                                          refreshPosts();
                                                         } else {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  const SnackBar(
-                                                            content: Text(
-                                                                "Terdapat kesalahan, silakan coba lagi."),
-                                                          ));
+                                                          showCustomSnackBar(
+                                                              context,
+                                                              "Oops, something went wrong");
                                                         }
                                                       }
                                                     },
@@ -417,7 +431,7 @@ class ForumPageState extends State<ForumPage> {
                                               "${posts[index].fields.text}",
                                               style: const TextStyle(
                                                 fontSize: 18.0,
-                                                color: Colors.grey,
+                                                color: Colors.black,
                                               ),
                                             ),
                                             const SizedBox(height: 10),
@@ -505,150 +519,148 @@ class ForumPageState extends State<ForumPage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: secondaryColor,
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: Border.all(),
-            builder: (context) => Container(
-              height: MediaQuery.of(context).size.height,
-              child: Scaffold(
-                appBar: AppBar(
-                  leading: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  actions: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: secondaryColor,
-                      ),
-                      child: const Text(
-                        'Post',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          final response = await request.postJson(
-                              "http://127.0.0.1:8000/forum/create-post-flutter/",
-                              jsonEncode(<String, String>{
-                                'title': _title,
-                                'text': _text,
-                                'book': IdBookSelected.toString(),
-                              }));
-                          if (response['status'] == 'success') {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("Produk baru berhasil disimpan!"),
-                            ));
-                            setState(() {
-                              fetchPost(
-                                  null); // Memanggil fetchPost lagi untuk memperbarui daftar post
-                            });
-                            Navigator.pop(context);
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                  "Terdapat kesalahan, silakan coba lagi."),
-                            ));
-                          }
-                        }
-                      },
+      floatingActionButton: request.loggedIn == true
+          ? FloatingActionButton(
+              backgroundColor: secondaryColor,
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
-                  ],
-                ),
-                body: Form(
-                    key: _formKey,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                  ),
+                  isScrollControlled: true,
+                  builder: (context) => Container(
+                    height: MediaQuery.of(context).size.height - 100,
+                    child: Scaffold(
+                      appBar: AppBar(
+                        leading: IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        actions: [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    hintText: 'Type Your Title Here',
-                                    hintStyle: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      _title = value!;
-                                    });
-                                  },
-                                  validator: (String? value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Nama tidak boleh kosong!";
-                                    }
-                                    return null;
-                                  },
+                            padding: EdgeInsets.only(right: 5),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: secondaryColor,
+                              ),
+                              child: const Text(
+                                'Post',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
-
-                                const Divider(
-                                    color:
-                                        secondaryColor), // tambahkan garis pembatas
-                                TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide.none, // hilangkan border
-                                    ),
-                                    hintText: "What's Happening?",
-                                    hintStyle: TextStyle(
-                                      color: Colors
-                                          .grey, // ganti dengan warna yang Anda inginkan
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  maxLines: 5,
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      _text = value!;
-                                    });
-                                  },
-                                  validator: (String? value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Nama tidak boleh kosong!";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                DropdownBook(
-                                  onBookSelected: (int? book) {
-                                    handleBookSelected(book);
-                                  },
-                                ),
-                              ],
+                              ),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  final response = await request.postJson(
+                                    "http://127.0.0.1:8000/forum/create-post-flutter/",
+                                    jsonEncode(<String, String>{
+                                      'title': _title,
+                                      'text': _text,
+                                      'book': IdBookSelected.toString(),
+                                    }),
+                                  );
+                                  if (response['status'] == 'success') {
+                                    showCustomSnackBar(context,
+                                        "Post is successfully created");
+                                    refreshPosts();
+                                    IdBookSelected = null;
+                                    Navigator.pop(context);
+                                  } else {
+                                    showCustomSnackBar(
+                                        context, "Oops, something went wrong");
+                                  }
+                                }
+                              },
                             ),
-                          )
+                          ),
                         ],
                       ),
-                    )),
-              ),
-            ),
-          );
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+                      body: Form(
+                        key: _formKey,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TextFormField(
+                                      decoration: const InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        hintText: 'Type Your Title Here',
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          _title = value!;
+                                        });
+                                      },
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Nama tidak boleh kosong!";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const Divider(color: secondaryColor),
+                                    TextFormField(
+                                      decoration: const InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        hintText: "What's Happening?",
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      maxLines: 5,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          _text = value!;
+                                        });
+                                      },
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Nama tidak boleh kosong!";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    DropdownBook(
+                                      onBookSelected: (int? book) {
+                                        handleBookSelected(book);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
     );
   }
 }
