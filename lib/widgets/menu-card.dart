@@ -1,4 +1,4 @@
-import 'package:bookbuffet/pages/MyBooks/main.dart';
+import 'package:bookbuffet/pages/MyBooks/screens/mybooks.dart';
 import 'package:bookbuffet/pages/catalog/main.dart';
 import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/main.dart';
