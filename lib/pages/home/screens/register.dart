@@ -29,6 +29,22 @@ class _RegisterPageState extends State<RegisterPage> {
     BottomBarController controller = Get.put(BottomBarController());
     return Scaffold(
       backgroundColor: Colors.grey[300],
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () {
+            controller.index.value = 0;
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BasePage(initialIndex: 0)));
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: secondaryColor,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Center(
           child: Column(
@@ -221,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 200, vertical: 25),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
