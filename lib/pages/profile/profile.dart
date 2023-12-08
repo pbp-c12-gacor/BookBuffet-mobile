@@ -80,6 +80,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     title: "Report Book", icon: Icons.report, onPress: () {}),
                 const SizedBox(height: 10),
                 ProfileMenuWidget(
+                    title: "My Books", icon: Icons.book, onPress: () {}),
+                const SizedBox(height: 10),
+                ProfileMenuWidget(
                     title: "Publish Book", icon: Icons.publish, onPress: () {}),
                 const SizedBox(height: 10),
                 ProfileMenuWidget(
