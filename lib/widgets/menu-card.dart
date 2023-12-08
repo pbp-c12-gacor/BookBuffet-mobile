@@ -1,9 +1,9 @@
-import 'package:bookbuffet/MyBooks/main.dart';
-import 'package:bookbuffet/catalog/main.dart';
-import 'package:bookbuffet/forum/screens/forum.dart';
+import 'package:bookbuffet/pages/MyBooks/screens/mybooks.dart';
+import 'package:bookbuffet/pages/catalog/main.dart';
+import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/main.dart';
-import 'package:bookbuffet/publish/main.dart';
-import 'package:bookbuffet/report/main.dart';
+import 'package:bookbuffet/pages/publish/main.dart';
+import 'package:bookbuffet/pages/report/main.dart';
 import 'package:flutter/material.dart';
 
 class MenuItem {

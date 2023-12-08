@@ -1,44 +1,35 @@
-import 'package:bookbuffet/forum/screens/forum.dart';
-import 'package:bookbuffet/home/home.dart';
+import 'package:bookbuffet/controller/bottom_bar.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-class BottomBar extends StatefulWidget {
+class BottomBar extends StatelessWidget {
   const BottomBar({super.key});
-
-  @override
-  State<BottomBar> createState() => _BottomBarState();
-}
-
-class _BottomBarState extends State<BottomBar> {
-  int _selectedIndex = 0;
-  List<Widget> _widgetsOptions = <Widget>[
-    MyHomePage(),
-    ForumPage(),
-  ];
-
-  void onItemTap(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    BottomBarController controller = Get.put(BottomBarController());
     return Container(
         decoration: const BoxDecoration(
-            color: secondaryColor,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+          color: secondaryColor,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+          boxShadow: [
+            BoxShadow(
+              color: primaryColor,
+              spreadRadius: 2,
+              blurRadius: 1,
+              offset: Offset(2, -4),
+            ),
+          ],
+        ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           child: GNav(
-            selectedIndex: _selectedIndex,
-            onTabChange: onItemTap,
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             backgroundColor: secondaryColor,
             color: primaryColor,
+            onTabChange: (value) => {controller.index.value = value},
             activeColor: primaryColor,
             tabBackgroundColor: Colors.grey.shade800,
             gap: 8,
