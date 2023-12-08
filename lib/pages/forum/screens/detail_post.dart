@@ -5,6 +5,8 @@ import 'package:bookbuffet/pages/forum/models/post.dart';
 import 'package:bookbuffet/pages/forum/screens/comment_form.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/forum/screens/forum.dart';
+import 'package:bookbuffet/pages/forum/utils/time_difference_formatter.dart';
+import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -119,14 +121,31 @@ class _DetailPostPageState extends State<DetailPostPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              widget.currUser["username"],
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "${widget.currUser["username"]}",
+                                    style: const TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        " · ${formatTimeDifference(widget.post.fields.dateAdded)}",
+                                    style: const TextStyle(
+                                      fontSize:
+                                          14.0, // Ukuran font lebih kecil dari username
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            if (widget.currUser["id"] ==
+                            if (request.jsonData["id"] ==
                                 widget.post.fields.user)
                               PopupMenuButton<int>(
                                 itemBuilder: (context) => [
@@ -146,9 +165,16 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                     showModalBottomSheet(
                                       context: context,
                                       isScrollControlled: true,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20)),
+                                      ),
                                       builder: (context) => Container(
                                         height:
-                                            MediaQuery.of(context).size.height,
+                                            MediaQuery.of(context).size.height -
+                                                100,
                                         child: Scaffold(
                                           appBar: AppBar(
                                             leading: IconButton(
@@ -158,62 +184,69 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                               },
                                             ),
                                             actions: [
-                                              ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      secondaryColor,
-                                                ),
-                                                child: const Text(
-                                                  'Edit',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 10),
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        secondaryColor,
                                                   ),
-                                                ),
-                                                onPressed: () async {
-                                                  if (_formKey.currentState!
-                                                      .validate()) {
-                                                    final response =
-                                                        await request.postJson(
-                                                      "http://127.0.0.1:8000/forum/edit-post-flutter/${widget.post.pk}/",
-                                                      jsonEncode(<String,
-                                                          String>{
-                                                        'title': _title,
-                                                        'text': _text,
-                                                      }),
-                                                    );
-                                                    if (response['status'] ==
-                                                        'success') {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        const SnackBar(
-                                                          content: Text(
-                                                              "Post berhasil diperbarui!"),
-                                                        ),
+                                                  child: const Text(
+                                                    'Edit',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  onPressed: () async {
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      final response =
+                                                          await request
+                                                              .postJson(
+                                                        "http://127.0.0.1:8000/forum/edit-post-flutter/${widget.post.pk}/",
+                                                        jsonEncode(<String,
+                                                            String>{
+                                                          'title': _title,
+                                                          'text': _text,
+                                                        }),
                                                       );
-                                                      setState(() {
-                                                        widget.post.fields
-                                                            .title = _title;
-                                                        widget.post.fields
-                                                            .text = _text;
-                                                      });
-                                                      widget.refreshPost();
-                                                      Navigator.pop(
-                                                          context); // Menutup modal
-                                                    } else {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        const SnackBar(
-                                                          content: Text(
-                                                              "Terdapat kesalahan, silakan coba lagi."),
-                                                        ),
-                                                      );
+                                                      if (response['status'] ==
+                                                          'success') {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          const SnackBar(
+                                                            content: Text(
+                                                                "Post berhasil diperbarui!"),
+                                                          ),
+                                                        );
+                                                        setState(() {
+                                                          widget.post.fields
+                                                              .title = _title;
+                                                          widget.post.fields
+                                                              .text = _text;
+                                                        });
+                                                        widget.refreshPost();
+                                                        Navigator.pop(
+                                                            context); // Menutup modal
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          const SnackBar(
+                                                            content: Text(
+                                                                "Terdapat kesalahan, silakan coba lagi."),
+                                                          ),
+                                                        );
+                                                      }
                                                     }
-                                                  }
-                                                },
-                                              ),
+                                                  },
+                                                ),
+                                              )
                                             ],
                                           ),
                                           body: Form(
@@ -415,7 +448,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                     ),
                                     trailing:
                                         userSnapshot.data!['id'] ==
-                                                widget.currUser["id"]
+                                                request.jsonData["id"]
                                             ? PopupMenuButton<int>(
                                                 itemBuilder: (context) => [
                                                   PopupMenuItem(
@@ -436,13 +469,26 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                     showModalBottomSheet(
                                                       context: context,
                                                       isScrollControlled: true,
-                                                      shape: Border.all(),
+                                                      clipBehavior: Clip
+                                                          .antiAliasWithSaveLayer,
+                                                      shape:
+                                                          const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        20),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        20)),
+                                                      ),
                                                       builder: (context) =>
                                                           Container(
                                                         height: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .height,
+                                                                    context)
+                                                                .size
+                                                                .height -
+                                                            100,
                                                         child: Scaffold(
                                                           appBar: AppBar(
                                                             leading: IconButton(
@@ -455,71 +501,68 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                               },
                                                             ),
                                                             actions: [
-                                                              ElevatedButton(
-                                                                style: ElevatedButton
-                                                                    .styleFrom(
-                                                                  backgroundColor:
-                                                                      secondaryColor,
-                                                                ),
+                                                              Padding(
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        right:
+                                                                            10),
                                                                 child:
-                                                                    const Text(
-                                                                  'Edit',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
+                                                                    ElevatedButton(
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                    backgroundColor:
+                                                                        secondaryColor,
                                                                   ),
-                                                                ),
-                                                                onPressed:
-                                                                    () async {
-                                                                  if (_formKey
-                                                                      .currentState!
-                                                                      .validate()) {
-                                                                    final response =
-                                                                        await request
-                                                                            .postJson(
-                                                                      "http://127.0.0.1:8000/forum/edit-comment-flutter/${snapshot.data![index].pk}/",
-                                                                      jsonEncode(<String,
-                                                                          String>{
-                                                                        'title':
-                                                                            _title,
-                                                                        'text':
-                                                                            _text,
-                                                                      }),
-                                                                    );
-                                                                    if (response[
-                                                                            'status'] ==
-                                                                        'success') {
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                        const SnackBar(
-                                                                          content:
-                                                                              Text("Post berhasil diperbarui!"),
-                                                                        ),
+                                                                  child:
+                                                                      const Text(
+                                                                    'Edit',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                                  ),
+                                                                  onPressed:
+                                                                      () async {
+                                                                    if (_formKey
+                                                                        .currentState!
+                                                                        .validate()) {
+                                                                      final response =
+                                                                          await request
+                                                                              .postJson(
+                                                                        "http://127.0.0.1:8000/forum/edit-comment-flutter/${snapshot.data![index].pk}/",
+                                                                        jsonEncode(<String,
+                                                                            String>{
+                                                                          'title':
+                                                                              _title,
+                                                                          'text':
+                                                                              _text,
+                                                                        }),
                                                                       );
-                                                                      setState(
-                                                                          () {
-                                                                        fetchComment(); // Memanggil fetchPost lagi untuk memperbarui daftar post
-                                                                      });
-                                                                      Navigator.pop(
-                                                                          context); // Menutup modal
-                                                                    } else {
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                        const SnackBar(
-                                                                          content:
-                                                                              Text("Terdapat kesalahan, silakan coba lagi."),
-                                                                        ),
-                                                                      );
+                                                                      if (response[
+                                                                              'status'] ==
+                                                                          'success') {
+                                                                        showCustomSnackBar(
+                                                                            context,
+                                                                            "Post is successfully updated");
+                                                                        setState(
+                                                                            () {
+                                                                          fetchComment(); // Memanggil fetchPost lagi untuk memperbarui daftar post
+                                                                        });
+                                                                        Navigator.pop(
+                                                                            context); // Menutup modal
+                                                                      } else {
+                                                                        showCustomSnackBar(
+                                                                            context,
+                                                                            "Oops, something went wrong");
+                                                                      }
                                                                     }
-                                                                  }
-                                                                },
-                                                              ),
+                                                                  },
+                                                                ),
+                                                              )
                                                             ],
                                                           ),
                                                           body: Form(
@@ -573,7 +616,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                                               (String? value) {
                                                                             if (value == null ||
                                                                                 value.isEmpty) {
-                                                                              return "Nama tidak boleh kosong!";
+                                                                              return "Content cannot be empty";
                                                                             }
                                                                             return null;
                                                                           },
@@ -603,24 +646,16 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                     );
                                                     if (response.statusCode ==
                                                         200) {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              const SnackBar(
-                                                        content: Text(
-                                                            "Comment berhasil dihapus!"),
-                                                      ));
+                                                      showCustomSnackBar(
+                                                          context,
+                                                          "Comment is deleted successfully");
                                                       setState(() {
                                                         fetchComment(); // Memanggil fetchPost lagi untuk memperbarui daftar post
                                                       });
                                                     } else {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              const SnackBar(
-                                                        content: Text(
-                                                            "Terdapat kesalahan, silakan coba lagi."),
-                                                      ));
+                                                      showCustomSnackBar(
+                                                          context,
+                                                          "Oops, something went wrong");
                                                     }
                                                   }
                                                 },
@@ -644,12 +679,14 @@ class _DetailPostPageState extends State<DetailPostPage> {
             left: 0,
             right: 0,
             child: Container(
-              child: CommentForm(
-                postId: widget.post.pk.toString(),
-                onCommentChanged: (String comment) {},
-                focusNode: _formFocusNode,
-                refreshController: _refreshController,
-              ),
+              child: request.loggedIn
+                  ? CommentForm(
+                      postId: widget.post.pk.toString(),
+                      onCommentChanged: (String comment) {},
+                      focusNode: _formFocusNode,
+                      refreshController: _refreshController,
+                    )
+                  : null,
             ),
           ),
         ],

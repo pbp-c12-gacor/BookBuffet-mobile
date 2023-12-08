@@ -42,7 +42,7 @@ class _EditCommentFormState extends State<EditCommentForm> {
                       border: UnderlineInputBorder(
                         borderSide: BorderSide.none, // hilangkan border
                       ),
-                      hintText: "What's Happening?",
+                      hintText: "What's your thoughts?",
                       hintStyle: TextStyle(
                         color: Colors
                             .grey, // ganti dengan warna yang Anda inginkan
@@ -58,7 +58,7 @@ class _EditCommentFormState extends State<EditCommentForm> {
                     },
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
-                        return "Nama tidak boleh kosong!";
+                        return "Content cannot be empty";
                       }
                       return null;
                     },
