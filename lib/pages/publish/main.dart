@@ -74,7 +74,7 @@ class _PublishPageState extends State<PublishPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
@@ -84,7 +84,7 @@ class _PublishPageState extends State<PublishPage> {
                     String previewLink = previewLinkController.text;
                   }
                 },
-                child: Text('Publish Your Book Here'),
+                child: const Text('Publish Your Book Here'),
               ),
             ],
           ),
