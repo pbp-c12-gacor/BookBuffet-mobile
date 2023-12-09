@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:bookbuffet/pages/catalog/models/author.dart';
 import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:bookbuffet/pages/catalog/models/category.dart';
+import 'package:bookbuffet/pages/catalog/models/rating.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -150,6 +151,27 @@ class ApiService {
       return books;
     } else {
       throw Exception('Failed to load books');
+    }
+  }
+
+  static Future<List<Book>> getRatings() async {
+    final response = await http.get(Uri.parse(baseApiUrl + '/ratings'));
+    if (response.statusCode == 200) {
+      List<Book> books = bookFromJson(response.body);
+      return books;
+    } else {
+      throw Exception('Failed to load ratings');
+    }
+  }
+
+  static Future<List<Rating>> getRatingsByBook(int id) async {
+    final response =
+        await http.get(Uri.parse(baseApiUrl + '/books/' + id.toString() + '/ratings'));
+    if (response.statusCode == 200) {
+      List<Rating> ratings = ratingFromJson(response.body);
+      return ratings;
+    } else {
+      throw Exception('Failed to load ratings');
     }
   }
 }
