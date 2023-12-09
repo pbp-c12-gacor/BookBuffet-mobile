@@ -3,8 +3,8 @@
 //     final book = bookFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:bookbuffet/pages/catalog/models/Author.dart';
-import 'package:bookbuffet/pages/catalog/models/Category.dart';
+import 'package:bookbuffet/pages/catalog/models/author.dart';
+import 'package:bookbuffet/pages/catalog/models/category.dart';
 
 List<Book> bookFromJson(String str) => List<Book>.from(json.decode(str).map((x) => Book.fromJson(x)));
 
