@@ -2,9 +2,12 @@ import 'package:bookbuffet/pages/MyBooks/screens/mybooks.dart';
 import 'package:bookbuffet/pages/catalog/main.dart';
 import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/pages/report/main.dart';
 import 'package:bookbuffet/pages/publish/main.dart';
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class MenuItem {
   final String name;
@@ -21,6 +24,7 @@ class MenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Material(
       color: secondaryColor,
       elevation: 5.0,
@@ -38,8 +42,13 @@ class MenuCard extends StatelessWidget {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const CatalogPage()));
           } else if (item.name == "Publish Book") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const PublishPage()));
+            if (request.loggedIn) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const PublishPage()));
+            } else {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()));
+            }
           } else if (item.name == "Report Book") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const ReportPage()));
