@@ -6,10 +6,10 @@ import 'package:bookbuffet/pages/catalog/models/rating.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseApiUrl = 'https://bookbuffet.onrender.com/api';
+  static String baseApiUrl = 'http://127.0.0.1:8000/api';
 
   static Future<List<Book>> getBooks() async {
-    final response = await http.get(Uri.parse(baseApiUrl + '/books'));
+    final response = await http.get(Uri.parse('$baseApiUrl/books/'));
     if (response.statusCode == 200) {
       List<Book> books = bookFromJson(response.body);
       return books;
@@ -19,7 +19,7 @@ class ApiService {
   }
 
   static Future<List<Author>> getAuthors() async {
-    final response = await http.get(Uri.parse(baseApiUrl + '/authors'));
+    final response = await http.get(Uri.parse('$baseApiUrl/authors/'));
     if (response.statusCode == 200) {
       List<Author> authors = authorFromJson(response.body);
       return authors;
@@ -29,8 +29,7 @@ class ApiService {
   }
 
   static Future<List<Category>> getCategories() async {
-    final response =
-        await http.get(Uri.parse(baseApiUrl + '/categories'));
+    final response = await http.get(Uri.parse('$baseApiUrl/categories/'));
     if (response.statusCode == 200) {
       List<Category> categories = categoryFromJson(response.body);
       return categories;
@@ -40,8 +39,7 @@ class ApiService {
   }
 
   static Future<Book> getBook(int id) async {
-    final response =
-        await http.get(Uri.parse(baseApiUrl + '/books/' + id.toString()));
+    final response = await http.get(Uri.parse('$baseApiUrl/books/$id'));
     if (response.statusCode == 200) {
       Book book = Book.fromJson(json.decode(response.body));
       return book;
@@ -51,8 +49,7 @@ class ApiService {
   }
 
   static Future<Author> getAuthor(int id) async {
-    final response =
-        await http.get(Uri.parse(baseApiUrl + '/authors/' + id.toString()));
+    final response = await http.get(Uri.parse('$baseApiUrl/authors/$id'));
     if (response.statusCode == 200) {
       Author author = Author.fromJson(json.decode(response.body));
       return author;
@@ -62,8 +59,7 @@ class ApiService {
   }
 
   static Future<Category> getCategory(int id) async {
-    final response =
-        await http.get(Uri.parse(baseApiUrl + '/categories/' + id.toString()));
+    final response = await http.get(Uri.parse('$baseApiUrl/categories/$id'));
     if (response.statusCode == 200) {
       Category category = Category.fromJson(json.decode(response.body));
       return category;
@@ -73,8 +69,7 @@ class ApiService {
   }
 
   static Future<List<Book>> getBooksByAuthor(int id) async {
-    final response = await http
-        .get(Uri.parse(baseApiUrl + '/authors/' + id.toString() + '/books'));
+    final response = await http.get(Uri.parse('$baseApiUrl/authors/$id/books'));
     if (response.statusCode == 200) {
       List<Book> books = bookFromJson(response.body);
       return books;
@@ -84,8 +79,8 @@ class ApiService {
   }
 
   static Future<List<Book>> getBooksByCategory(int id) async {
-    final response = await http.get(
-        Uri.parse(baseApiUrl + '/categories/' + id.toString() + '/books'));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/categories/$id/books'));
     if (response.statusCode == 200) {
       List<Book> books = bookFromJson(response.body);
       return books;
@@ -96,12 +91,8 @@ class ApiService {
 
   static Future<List<Book>> getBooksByAuthorAndCategory(
       int authorId, int categoryId) async {
-    final response = await http.get(Uri.parse(baseApiUrl +
-        '/authors/' +
-        authorId.toString() +
-        '/categories/' +
-        categoryId.toString() +
-        '/books'));
+    final response = await http.get(Uri.parse(
+        '$baseApiUrl/authors/$authorId/categories/$categoryId/books'));
     if (response.statusCode == 200) {
       List<Book> books = bookFromJson(response.body);
       return books;
@@ -111,8 +102,8 @@ class ApiService {
   }
 
   static Future<List<Book>> searchBooks(String query) async {
-    final response = await http.get(
-        Uri.parse(baseApiUrl + '/search?search=' + query));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/search?search=$query'));
     if (response.statusCode == 200) {
       List<Book> books = bookFromJson(response.body);
       return books;
@@ -122,8 +113,8 @@ class ApiService {
   }
 
   static Future<List<Book>> searchBooksByTitle(String query) async {
-    final response = await http.get(Uri.parse(
-        baseApiUrl + '/search?search=title:' + query));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/search?search=title:$query'));
     if (response.statusCode == 200) {
       List<Book> books = bookFromJson(response.body);
       return books;
@@ -133,8 +124,8 @@ class ApiService {
   }
 
   static Future<List<Book>> searchBooksByAuthor(String query) async {
-    final response = await http.get(Uri.parse(
-        baseApiUrl + '/search?search=author:' + query));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/search?search=author:$query'));
     if (response.statusCode == 200) {
       List<Book> books = bookFromJson(response.body);
       return books;
@@ -144,8 +135,8 @@ class ApiService {
   }
 
   static Future<List<Book>> searchBooksByCategory(String query) async {
-    final response = await http.get(Uri.parse(
-        baseApiUrl + '/search?search=category:' + query));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/search?search=category:$query'));
     if (response.statusCode == 200) {
       List<Book> books = bookFromJson(response.body);
       return books;
@@ -155,7 +146,7 @@ class ApiService {
   }
 
   static Future<List<Book>> getRatings() async {
-    final response = await http.get(Uri.parse(baseApiUrl + '/ratings'));
+    final response = await http.get(Uri.parse('$baseApiUrl/ratings/'));
     if (response.statusCode == 200) {
       List<Book> books = bookFromJson(response.body);
       return books;
@@ -165,8 +156,7 @@ class ApiService {
   }
 
   static Future<List<Rating>> getRatingsByBook(int id) async {
-    final response =
-        await http.get(Uri.parse(baseApiUrl + '/books/' + id.toString() + '/ratings'));
+    final response = await http.get(Uri.parse('$baseApiUrl/books/$id/ratings'));
     if (response.statusCode == 200) {
       List<Rating> ratings = ratingFromJson(response.body);
       return ratings;
