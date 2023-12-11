@@ -1,5 +1,5 @@
 import 'package:bookbuffet/pages/MyBooks/screens/mybooks.dart';
-import 'package:bookbuffet/pages/catalog/main.dart';
+import 'package:bookbuffet/pages/catalog/screens/catalog.dart';
 import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/publish/screens/publish_form.dart';
@@ -36,7 +36,7 @@ class MenuCard extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const MyBooksPage()));
           } else if (item.name == "Catalog") {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const CatalogPage()));
+                MaterialPageRoute(builder: (context) => const Catalog()));
           } else if (item.name == "Publish Book") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const PublishForm()));
