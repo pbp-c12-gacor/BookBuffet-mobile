@@ -1,6 +1,7 @@
 import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:bookbuffet/pages/base.dart';
 import 'package:provider/provider.dart';
 import 'package:bookbuffet/pages/home/screens/home.dart';
 import 'dart:async';
@@ -34,8 +35,16 @@ class _PublishPageState extends State<PublishPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Book Buffet'),
-        backgroundColor: secondaryColor,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: secondaryColor,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -48,13 +57,18 @@ class _PublishPageState extends State<PublishPage> {
                   "Publish Your Book Here!",
                   style: TextStyle(
                     fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 TextFormField(
                   controller: titleController,
                   decoration: const InputDecoration(
                     labelText: 'Title',
                     hintText: 'Type your book title here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -63,11 +77,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: subtitleController,
                   decoration: const InputDecoration(
                     labelText: 'Subtitle',
                     hintText: 'Type your book subtitle here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -76,11 +94,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: authorsController,
                   decoration: const InputDecoration(
                     labelText: 'Authors',
                     hintText: 'Seperate each Authors with Comma (,)',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -89,11 +111,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: publisherController,
                   decoration: const InputDecoration(
                     labelText: 'Publisher',
                     hintText: 'Type your book publisher here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -102,11 +128,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: publishedDateController,
                   decoration: const InputDecoration(
                     labelText: 'Published Date',
                     hintText: 'Enter the year number',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -121,11 +151,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: descriptionController,
                   decoration: const InputDecoration(
                     labelText: 'Description',
                     hintText: 'Type your book description here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -134,11 +168,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: pageCountController,
                   decoration: const InputDecoration(
                     labelText: 'Page Count',
                     hintText: 'Type your book page count here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -153,11 +191,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: categoriesController,
                   decoration: const InputDecoration(
                     labelText: 'Categories',
                     hintText: 'Separate each categories with Comma (,)',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -165,12 +207,16 @@ class _PublishPageState extends State<PublishPage> {
                     }
                     return null;
                   },
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 TextFormField(
                   controller: languageController,
                   decoration: const InputDecoration(
                     labelText: 'Language',
                     hintText: 'Type your book language here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -179,11 +225,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: previewLinkController,
                   decoration: const InputDecoration(
                     labelText: 'Preview Link',
                     hintText: 'Type your book preview link here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -192,12 +242,16 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   // Harus diganti buat minta input file
                   controller: coverController,
                   decoration: const InputDecoration(
                     labelText: 'Cover',
                     hintText: 'Upload your book cover here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -206,11 +260,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: previewLinkController,
                   decoration: const InputDecoration(
                     labelText: 'ISBN 10',
                     hintText: 'Type your book ISBN 10 here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -219,11 +277,15 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: previewLinkController,
                   decoration: const InputDecoration(
                     labelText: 'ISBN 13',
                     hintText: 'Type your book ISBN 13 here',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -232,51 +294,72 @@ class _PublishPageState extends State<PublishPage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       final response = await request.postJson(
                         "http://127.0.0.1:8000/publish/create-publish-flutter/",
-                        jsonEncode(<String, dynamic>{
-                          'title': titleController.text,
-                          'subtitle': subtitleController.text,
-                          'authors': authorsController.text,
-                          'publisher': publisherController.text,
-                          'published_date':
-                              int.parse(publishedDateController.text),
-                          'description': descriptionController.text,
-                          'page_count': int.parse(pageCountController.text),
-                          'categories': categoriesController.text,
-                          'language': languageController.text,
-                          'preview_link': previewLinkController.text,
-                          'cover': coverController.text,
-                          'isbn_10': isbn10Controller.text,
-                          'isbn_13': isbn13Controller.text,
-                        }),
+                        jsonEncode(
+                          <String, dynamic>{
+                            'title': titleController.text,
+                            'subtitle': subtitleController.text,
+                            'authors': authorsController.text,
+                            'publisher': publisherController.text,
+                            'published_date':
+                                int.parse(publishedDateController.text),
+                            'description': descriptionController.text,
+                            'page_count': int.parse(pageCountController.text),
+                            'categories': categoriesController.text,
+                            'language': languageController.text,
+                            'preview_link': previewLinkController.text,
+                            'cover': coverController.text,
+                            'isbn_10': isbn10Controller.text,
+                            'isbn_13': isbn13Controller.text,
+                          },
+                        ),
                       );
 
                       if (response['status'] == 'success') {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text(
-                              "Your book has been published! Please wait for forward confirmation."),
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Your book has been published! Please wait for forward confirmation.",
+                            ),
+                          ),
+                        );
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MyHomePage()),
+                          MaterialPageRoute(
+                            builder: (context) => MyHomePage(),
+                          ),
                         );
                       } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Oops, something went wrong"),
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Oops, something went wrong"),
+                          ),
+                        );
                       }
 
                       _formKey.currentState!.reset();
                     }
                   },
-                  child: const Text('Click Here to Publish!'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: secondaryColor,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 80,
+                      vertical: 20,
+                    ),
+                  ),
+                  child: const Text(
+                    'Click Here to Publish!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             ),
