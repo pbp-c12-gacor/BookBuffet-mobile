@@ -40,7 +40,7 @@ class _CatalogState extends State<Catalog> {
               length: _length + 1,
               child: Scaffold(
                 appBar: AppBar(
-                  title: const Text('Book Buffet'),
+                  title: const Text('Books Catalog'),
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(50),
                     child: TabBar(isScrollable: true, tabs: [
@@ -79,10 +79,18 @@ class _CatalogState extends State<Catalog> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           List<Book> books = snapshot.data!;
-                          return ListView.builder(
+                          return GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.8,
+                            ),
                             itemCount: books.length,
                             itemBuilder: (context, index) {
-                              return BookCard(book: books[index]);
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: BookCard(book: books[index]),
+                              );
                             },
                           );
                         } else if (snapshot.hasError) {
@@ -103,10 +111,18 @@ class _CatalogState extends State<Catalog> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             List<Book> books = snapshot.data!;
-                            return ListView.builder(
+                            return GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.8,
+                              ),
                               itemCount: books.length,
                               itemBuilder: (context, index) {
-                                return BookCard(book: books[index]);
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: BookCard(book: books[index]),
+                                );
                               },
                             );
                           } else if (snapshot.hasError) {
@@ -137,111 +153,3 @@ class _CatalogState extends State<Catalog> {
     );
   }
 }
-//       child: DefaultTabController(
-//         // Add tabs as per the number of categories
-//         // calculated from the API
-//         length: _length,
-//         child: Scaffold(
-//           appBar: AppBar(
-//             title: const Text('Book Buffet'),
-//             bottom: PreferredSize(
-//               preferredSize: const Size.fromHeight(50),
-//               child: FutureBuilder<List<Category>>(
-//                 future: _categories,
-//                 builder: (context, snapshot) {
-//                   if (snapshot.hasData) {
-//                     List<Category> categories = snapshot.data!;
-//                     return TabBar(isScrollable: true, tabs: [
-//                       const Tab(
-//                         text: 'All',
-//                       ),
-//                       // Add a tab for each category
-//                       // from the API
-//                       ...categories.map((Category category) {
-//                         return Tab(
-//                           text: category.name,
-//                         );
-//                       }).toList(),
-//                     ]);
-//                   } else if (snapshot.hasError) {
-//                     return const Center(
-//                       child: Text('Something went wrong!'),
-//                     );
-//                   }
-//                   return const Center(
-//                     child: CircularProgressIndicator(),
-//                   );
-//                 },
-//               ),
-//             ),
-//             actions: [
-//               // Add a my books button to the app bar
-//               IconButton(
-//                 onPressed: () {},
-//                 icon: const Icon(Icons.book),
-//               ),
-//               // Add a search button to the app bar
-//               IconButton(
-//                 onPressed: () {},
-//                 icon: const Icon(Icons.search),
-//               ),
-//             ],
-//           ),
-//           body: TabBarView(
-//             // Add a list view for each tab
-//             // Based on its category
-//             // First tab for all books
-//             children: [
-//               FutureBuilder<List<Book>>(
-//                 future: _books,
-//                 builder: (context, snapshot) {
-//                   if (snapshot.hasData) {
-//                     List<Book> books = snapshot.data!;
-//                     return ListView.builder(
-//                       itemCount: books.length,
-//                       itemBuilder: (context, index) {
-//                         return BookCard(book: books[index]);
-//                       },
-//                     );
-//                   } else if (snapshot.hasError) {
-//                     return const Center(
-//                       child: Text('Something went wrong!'),
-//                     );
-//                   }
-//                   return const Center(
-//                     child: CircularProgressIndicator(),
-//                   );
-//                 },
-//               ),
-//               // Add a tab for each category
-//               // from the API
-//               ...List.generate(_length, (index) {
-//                 return FutureBuilder<List<Book>>(
-//                   future: ApiService.getBooksByCategory(index + 1),
-//                   builder: (context, snapshot) {
-//                     if (snapshot.hasData) {
-//                       List<Book> books = snapshot.data!;
-//                       return ListView.builder(
-//                         itemCount: books.length,
-//                         itemBuilder: (context, index) {
-//                           return BookCard(book: books[index]);
-//                         },
-//                       );
-//                     } else if (snapshot.hasError) {
-//                       return const Center(
-//                         child: Text('Something went wrong!'),
-//                       );
-//                     }
-//                     return const Center(
-//                       child: CircularProgressIndicator(),
-//                     );
-//                   },
-//                 );
-//               }).toList(),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

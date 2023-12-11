@@ -14,41 +14,51 @@ class BooksByAuthor extends StatelessWidget {
   Widget build(BuildContext context) {
     // Make a listview of book cards
     // for each author
-    return ListView.builder(
-      itemCount: booksByAuthors.length,
-      itemBuilder: (context, index) {
-        return FutureBuilder<List<Book>>(
-          future: booksByAuthors[index],
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<Book> books = snapshot.data!;
-              return Column(
-                children: [
-                  // Add a header for each author
-                  Text(
-                    authors[index].name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  // Add a book card for each book
-                  // by the author
-                  ...books.map((Book book) {
-                    return BookCard(book: book);
-                  }).toList(),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('Something went wrong!'),
-              );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
+    return SizedBox(
+        height: 250 * booksByAuthors.length.toDouble(),
+        child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: booksByAuthors.length,
+          itemBuilder: (context, index) {
+            return FutureBuilder<List<Book>>(
+              future: booksByAuthors[index],
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Book> books = snapshot.data!;
+                  return Column(
+                    children: [
+                      // Add a header for each author
+                      Text(
+                        "Books by ${authors[index].name}",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      // Add a book card for each book
+                      // by the author
+                      SizedBox(
+                        height: 200,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: books.length,
+                          itemBuilder: (context, index) {
+                            return BookCard(book: books[index]);
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Something went wrong!'),
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
             );
           },
-        );
-      },
-    );
+        ));
   }
 }

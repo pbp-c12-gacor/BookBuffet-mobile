@@ -66,21 +66,26 @@ class BookCard extends StatelessWidget {
                 );
               },
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Add a book cover image
-                  CachedNetworkImage(
-                    imageUrl: book.cover,
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                  Expanded(
+                    child: CachedNetworkImage(
+                      imageUrl: book.cover,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
                   ),
                   // Add a book title
                   Text(
                     book.title,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Raleway',
                     ),
                   ),
                   // Add a book authors
@@ -91,16 +96,27 @@ class BookCard extends StatelessWidget {
                     book.authors.length > 1
                         ? '${book.authors[0].name} et al.'
                         : book.authors[0].name,
+                    textAlign: TextAlign.center,
                   ),
                   // Add a mean rating
                   // If there are no ratings, show '0 ⭐ (0)'
                   // If there are ratings, show the mean rating
                   // followed by the number of ratings in brackets
-                  Text(
-                    ratings.isEmpty
-                        ? '0 ⭐ (0)'
-                        : '${meanRating.toStringAsFixed(1)} ⭐ (${ratings.length})',
-                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        ratings.isEmpty ? '0' : meanRating.toStringAsFixed(1),
+                      ),
+                      const Icon(
+                        Icons.star,
+                        color: Colors.yellow,
+                      ),
+                      Text(
+                        ' (${ratings.length})',
+                      )
+                    ],
+                  )
                 ],
               ),
             ),

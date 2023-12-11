@@ -6,7 +6,7 @@ import 'package:bookbuffet/pages/catalog/models/rating.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static String baseApiUrl = 'http://127.0.0.1:8000/api';
+  static String baseApiUrl = 'https://bookbuffet.onrender.com/api';
 
   static Future<List<Book>> getBooks() async {
     final response = await http.get(Uri.parse('$baseApiUrl/books/'));
