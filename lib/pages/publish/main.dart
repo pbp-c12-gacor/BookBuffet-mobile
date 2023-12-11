@@ -2,6 +2,7 @@ import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:bookbuffet/pages/home/screens/home.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -13,10 +14,10 @@ class PublishPage extends StatefulWidget {
 }
 
 class _PublishPageState extends State<PublishPage> {
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
   TextEditingController subtitleController = TextEditingController();
-  TextEditingController authorController = TextEditingController();
+  TextEditingController authorsController = TextEditingController();
   TextEditingController publisherController = TextEditingController();
   TextEditingController publishedDateController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -40,7 +41,7 @@ class _PublishPageState extends State<PublishPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
-            key: formKey,
+            key: _formKey,
             child: Column(
               children: [
                 const Text(
@@ -76,7 +77,7 @@ class _PublishPageState extends State<PublishPage> {
                   },
                 ),
                 TextFormField(
-                  controller: authorController,
+                  controller: authorsController,
                   decoration: const InputDecoration(
                     labelText: 'Authors',
                     hintText: 'Seperate each Authors with Comma (,)',
@@ -212,6 +213,9 @@ class _PublishPageState extends State<PublishPage> {
                     hintText: 'Type your book ISBN 10 here',
                   ),
                   validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the ISBN 10';
+                    }
                     return null;
                   },
                 ),
@@ -222,17 +226,54 @@ class _PublishPageState extends State<PublishPage> {
                     hintText: 'Type your book ISBN 13 here',
                   ),
                   validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the ISBN 13';
+                    }
                     return null;
                   },
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      String title = titleController.text;
-                      String subtitle = subtitleController.text;
-                      String author = authorController.text;
-                      String previewLink = previewLinkController.text;
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      final response = await request.postJson(
+                        "http://127.0.0.1:8000/publish/create-publish-flutter/",
+                        jsonEncode(<String, dynamic>{
+                          'title': titleController.text,
+                          'subtitle': subtitleController.text,
+                          'authors': authorsController.text,
+                          'publisher': publisherController.text,
+                          'published_date':
+                              int.parse(publishedDateController.text),
+                          'description': descriptionController.text,
+                          'page_count': int.parse(pageCountController.text),
+                          'categories': categoriesController.text,
+                          'language': languageController.text,
+                          'preview_link': previewLinkController.text,
+                          'cover': coverController.text,
+                          'isbn_10': isbn10Controller.text,
+                          'isbn_13': isbn13Controller.text,
+                        }),
+                      );
+
+                      if (response['status'] == 'success') {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                              "Your book has been published! Please wait for forward confirmation."),
+                        ));
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyHomePage()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Oops, something went wrong"),
+                        ));
+                      }
+
+                      _formKey.currentState!.reset();
                     }
                   },
                   child: const Text('Click Here to Publish!'),
