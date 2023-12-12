@@ -1,11 +1,19 @@
+import 'package:bookbuffet/controller/bottom_bar.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:bookbuffet/pages/base.dart';
 import 'package:provider/provider.dart';
 import 'package:bookbuffet/pages/home/screens/home.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_field/image_field.dart';
+import 'package:image_field/linear_progress_Indicator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 class PublishPage extends StatefulWidget {
   const PublishPage({super.key});
@@ -30,9 +38,29 @@ class _PublishPageState extends State<PublishPage> {
   TextEditingController isbn10Controller = TextEditingController();
   TextEditingController isbn13Controller = TextEditingController();
 
+  XFile? selectedImage; // Add a variable to hold the selected image
+  String? base64Image;
+
+  Future<void> uploadImage() async {
+    final XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      List<int> imageBytes = await pickedFile.readAsBytes();
+      base64Image = base64Encode(imageBytes);
+
+      setState(() {
+        selectedImage = pickedFile;
+        coverController.text = pickedFile.name;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
+    BottomBarController controller = Get.put(BottomBarController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -245,26 +273,45 @@ class _PublishPageState extends State<PublishPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormField(
-                  // Harus diganti buat minta input file
-                  controller: coverController,
-                  decoration: const InputDecoration(
-                    labelText: 'Cover',
-                    hintText: 'Upload your book cover here',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the cover';
-                    }
-                    return null;
-                  },
+                Stack(
+                  children: [
+                    TextFormField(
+                      readOnly: true,
+                      onTap: () async {
+                        await uploadImage();
+                      },
+                      controller: coverController,
+                      decoration: const InputDecoration(
+                        labelText: 'Cover',
+                        hintText: 'Upload your book cover here',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (String? value) {
+                        if (selectedImage == null) {
+                          return 'Please pick an image';
+                        }
+                        return null;
+                      },
+                    ),
+                    if (selectedImage != null)
+                      Positioned(
+                        right: 8.0,
+                        top: 5.0,
+                        bottom: 5.0,
+                        child: Image.network(
+                          selectedImage!.path,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
-                  controller: previewLinkController,
+                  controller: isbn10Controller,
                   decoration: const InputDecoration(
                     labelText: 'ISBN 10',
                     hintText: 'Type your book ISBN 10 here',
@@ -281,7 +328,7 @@ class _PublishPageState extends State<PublishPage> {
                   height: 20,
                 ),
                 TextFormField(
-                  controller: previewLinkController,
+                  controller: isbn13Controller,
                   decoration: const InputDecoration(
                     labelText: 'ISBN 13',
                     hintText: 'Type your book ISBN 13 here',
@@ -298,6 +345,8 @@ class _PublishPageState extends State<PublishPage> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+                      String fileName = selectedImage!.name.split('/').last;
+
                       final response = await request.postJson(
                         "http://127.0.0.1:8000/publish/create-publish-flutter/",
                         jsonEncode(
@@ -313,7 +362,7 @@ class _PublishPageState extends State<PublishPage> {
                             'categories': categoriesController.text,
                             'language': languageController.text,
                             'preview_link': previewLinkController.text,
-                            'cover': coverController.text,
+                            'cover': fileName,
                             'isbn_10': isbn10Controller.text,
                             'isbn_13': isbn13Controller.text,
                           },
@@ -328,10 +377,13 @@ class _PublishPageState extends State<PublishPage> {
                             ),
                           ),
                         );
+                        controller.index.value = 0;
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MyHomePage(),
+                            builder: (context) => BasePage(
+                              initialIndex: 0,
+                            ),
                           ),
                         );
                       } else {
