@@ -10,7 +10,7 @@ class UserApiService {
   }
 
   static Future<bool> addToMyBooks(
-      CookieRequest cookieRequest, String bookId) async {
+      CookieRequest cookieRequest, int bookId) async {
     final request =
         http.Request('POST', Uri.parse('$baseUrl/addtomybooks/$bookId'));
     request.headers.addAll(cookieRequest.headers);
@@ -24,7 +24,7 @@ class UserApiService {
   }
 
   static Future<bool> removeFromMyBooks(
-      CookieRequest cookieRequest, String bookId) async {
+      CookieRequest cookieRequest, int bookId) async {
     final request =
         http.Request('POST', Uri.parse('$baseUrl/removemybooks/$bookId'));
     request.headers.addAll(cookieRequest.headers);
@@ -38,7 +38,7 @@ class UserApiService {
   }
 
   static Future<bool> isBookInMyBooks(
-      CookieRequest cookieRequest, String bookId) async {
+      CookieRequest cookieRequest, int bookId) async {
     final request =
         http.Request('GET', Uri.parse('$baseUrl/isinmybooks/$bookId'));
     request.headers.addAll(cookieRequest.headers);

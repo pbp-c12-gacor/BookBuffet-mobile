@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:expandable_text/expandable_text.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:bookbuffet/pages/catalog/models/rating.dart';
 import 'package:bookbuffet/pages/catalog/widgets/books_by_author.dart';
 import 'package:bookbuffet/pages/catalog/widgets/ratings.dart';
 import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
+import 'package:bookbuffet/pages/catalog/utils/user_api_service.dart';
 
 class BookDetail extends StatefulWidget {
   final Book book;
@@ -44,6 +48,10 @@ class _BookDetailState extends State<BookDetail> {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    CookieRequest cookieRequest =
+        Provider.of<CookieRequest>(context, listen: false);
+    bool isLoggedIn = UserApiService.isLoggedin(cookieRequest);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -55,6 +63,93 @@ class _BookDetailState extends State<BookDetail> {
             icon: const Icon(Icons.arrow_back),
           ),
           title: Text(widget.book.title),
+          actions: [
+            // Add an add to my books button to the app bar (Icons.bookmark_add)
+            // if the user is logged in.
+            // if the book is already in my books, show a remove button (Icons.bookmark_remove)
+            // instead.
+            if (isLoggedIn)
+              FutureBuilder<bool>(
+                future: UserApiService.isBookInMyBooks(
+                    cookieRequest, widget.book.id),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    bool isBookInMyBooks = snapshot.data!;
+                    return IconButton(
+                      onPressed: () async {
+                        if (isBookInMyBooks) {
+                          bool isRemoved =
+                              await UserApiService.removeFromMyBooks(
+                                  cookieRequest, widget.book.id);
+                          if (isRemoved) {
+                            scaffoldMessenger.showSnackBar(
+                              const SnackBar(
+                                content: Text('Book removed from My Books'),
+                              ),
+                            );
+                          } else {
+                            scaffoldMessenger.showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Failed to remove book from My Books'),
+                              ),
+                            );
+                          }
+                        } else {
+                          bool isAdded = await UserApiService.addToMyBooks(
+                              cookieRequest, widget.book.id);
+                          if (isAdded) {
+                            scaffoldMessenger.showSnackBar(
+                              const SnackBar(
+                                content: Text('Book added to My Books'),
+                              ),
+                            );
+                          } else {
+                            scaffoldMessenger.showSnackBar(
+                              const SnackBar(
+                                content: Text('Failed to add book to My Books'),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      icon: isBookInMyBooks
+                          ? const Icon(
+                              Icons.bookmark_remove,
+                              color: Colors.orange,
+                            )
+                          : const Icon(
+                              Icons.bookmark_add,
+                              color: Colors.grey,
+                            ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Center(
+                      child: Text('Something went wrong!'),
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              )
+            else ...[
+              // Add a login button to the app bar (Icons.login)
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.login,
+                ),
+              ),
+            ],
+          ],
         ),
         body: ListView(
           children: [
@@ -179,16 +274,6 @@ class _BookDetailState extends State<BookDetail> {
                                       style: ElevatedButton.styleFrom(
                                         fixedSize: const Size(200, 40),
                                       ),
-                                      onPressed: () {},
-                                      child: const Text('Add to my books'),
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        fixedSize: const Size(200, 40),
-                                      ),
                                       onPressed: () {
                                         Uri link =
                                             Uri.parse(widget.book.previewLink);
@@ -221,139 +306,138 @@ class _BookDetailState extends State<BookDetail> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Row(
-                    children: [
-                      const Text(
-                        'Published by ',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Published by ',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
                       ),
-                      Text(
-                        widget.book.publisher != ""
-                            ? widget.book.publisher
-                            : "Unknown",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      children: [
+                        TextSpan(
+                          text: widget.book.publisher != ""
+                              ? widget.book.publisher
+                              : 'Unknown',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const Text(
-                        ' on ',
-                        style: TextStyle(
-                          fontSize: 16,
+                        const TextSpan(
+                          text: ' on ',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      Text(
-                        widget.book.publishedDate.toString(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                        TextSpan(
+                          text: widget.book.publishedDate.toString(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 8,
                   ),
-                  Row(
-                    children: [
-                      const Text(
-                        'Language: ',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Language: ',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
                       ),
-                      Text(
-                        widget.book.language.toString().split('.')[1],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      children: [
+                        TextSpan(
+                          text: widget.book.language.toString().split('.')[1],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 8,
                   ),
-                  Row(
-                    children: [
-                      const Text(
-                        'ISBN-10: ',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                  RichText(
+                    text: TextSpan(
+                      text: 'ISBN-10: ',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
                       ),
-                      Text(
-                        widget.book.isbn10,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      children: [
+                        TextSpan(
+                          text: widget.book.isbn10,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 8,
                   ),
-                  Row(
-                    children: [
-                      const Text(
-                        'ISBN-13: ',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                  RichText(
+                    text: TextSpan(
+                      text: 'ISBN-13: ',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
                       ),
-                      Text(
-                        widget.book.isbn13,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      children: [
+                        TextSpan(
+                          text: widget.book.isbn13,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 8,
                   ),
-                  Row(
-                    children: [
-                      const Text(
-                        'Pages: ',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Pages: ',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
                       ),
-                      Text(
-                        widget.book.pageCount.toString(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      children: [
+                        TextSpan(
+                          text: widget.book.pageCount.toString(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 8,
                   ),
-                  Row(
-                    children: [
-                      const Text(
-                        'Categories: ',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Categories: ',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
                       ),
-                      Text(
-                        widget.book.categories
-                            .map((category) => category.name)
-                            .join(', '),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      children: [
+                        TextSpan(
+                          text: widget.book.categories
+                              .map((category) => category.name)
+                              .join(', '),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
