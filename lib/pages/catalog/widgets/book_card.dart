@@ -6,6 +6,7 @@ import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:bookbuffet/pages/catalog/models/rating.dart';
 import 'package:bookbuffet/pages/catalog/screens/book_detail.dart';
 import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
+import 'package:bookbuffet/pages/catalog/utils/user_api_service.dart';
 
 class BookCard extends StatelessWidget {
   final Book book;
@@ -45,98 +46,49 @@ class BookCard extends StatelessWidget {
               onLongPress: () async {
                 CookieRequest cookieRequest =
                     Provider.of<CookieRequest>(context, listen: false);
-                bool isLoggedIn =
-                    await ApiService.isLoggedin(cookieRequest);
-                if (!isLoggedIn) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please login first!'),
-                    ),
-                  );
-                  return;
-                }
-                bool isBookInMyBooks =
-                    await ApiService.isBookInMyBooks(cookieRequest, book.id);
-                if (isBookInMyBooks) {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Remove from my books'),
-                        content: const Text('Do you want to remove this book?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('No'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              bool isRemoved = await ApiService.removeFromMyBooks(
-                                  cookieRequest, book.id);
-                              if (isRemoved) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Book removed!'),
-                                  ),
-                                );
-                              } else {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Something went wrong!'),
-                                  ),
-                                );
-                              }
-                            },
-                            child: const Text('Yes'),
-                          ),
-                        ],
+                final scaffoldMessenger = ScaffoldMessenger.of(context);
+                bool isLoggedIn = UserApiService.isLoggedin(cookieRequest);
+                if (isLoggedIn) {
+                  bool isBookInMyBooks = await UserApiService.isBookInMyBooks(
+                      cookieRequest, book.id);
+                  if (isBookInMyBooks) {
+                    bool isRemoved = await UserApiService.removeFromMyBooks(
+                        cookieRequest, book.id);
+                    if (isRemoved) {
+                      scaffoldMessenger.showSnackBar(
+                        const SnackBar(
+                          content: Text('Book removed from My Books'),
+                        ),
                       );
-                    },
-                  );
+                    } else {
+                      scaffoldMessenger.showSnackBar(
+                        const SnackBar(
+                          content: Text('Failed to remove book from My Books'),
+                        ),
+                      );
+                    }
+                  } else {
+                    bool isAdded = await UserApiService.addToMyBooks(
+                        cookieRequest, book.id);
+                    if (isAdded) {
+                      scaffoldMessenger.showSnackBar(
+                        const SnackBar(
+                          content: Text('Book added to My Books'),
+                        ),
+                      );
+                    } else {
+                      scaffoldMessenger.showSnackBar(
+                        const SnackBar(
+                          content: Text('Failed to add book to My Books'),
+                        ),
+                      );
+                    }
+                  }
                 } else {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Add to my books'),
-                        content:
-                            const Text('Do you want to add this book to my books?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('No'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              bool isAdded = await ApiService.addToMyBooks(
-                                  cookieRequest, book.id);
-                              if (isAdded) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Book added!'),
-                                  ),
-                                );
-                              } else {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Something went wrong!'),
-                                  ),
-                                );
-                              }
-                            },
-                            child: const Text('Yes'),
-                          ),
-                        ],
-                      );
-                    },
+                  scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                      content: Text('Please login to add books to My Books'),
+                    ),
                   );
                 }
               },

@@ -3,6 +3,7 @@ import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:bookbuffet/pages/catalog/models/category.dart';
 import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
 import 'package:bookbuffet/pages/catalog/widgets/book_card.dart';
+import 'package:bookbuffet/pages/MyBooks/screens/mybooks.dart';
 
 class Catalog extends StatefulWidget {
   const Catalog({Key? key}) : super(key: key);
@@ -59,7 +60,14 @@ class _CatalogState extends State<Catalog> {
                   actions: [
                     // Add a my books button to the app bar
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyBooksPage(),
+                          ),
+                        );
+                      },
                       icon: const Icon(Icons.book),
                     ),
                     // Add a search button to the app bar

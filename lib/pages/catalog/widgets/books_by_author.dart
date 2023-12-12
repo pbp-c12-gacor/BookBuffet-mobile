@@ -42,7 +42,13 @@ class BooksByAuthor extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           itemCount: books.length,
                           itemBuilder: (context, index) {
-                            return BookCard(book: books[index]);
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                width: 150,
+                                child: BookCard(book: books[index]),
+                              ),
+                            );
                           },
                         ),
                       ),
