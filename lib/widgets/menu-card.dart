@@ -50,8 +50,13 @@ class MenuCard extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const LoginPage()));
             }
           } else if (item.name == "Report Book") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ReportPage()));
+            if (request.loggedIn) {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const ReportPage()));
+            } else {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()));
+            }
           }
         },
         child: Container(
