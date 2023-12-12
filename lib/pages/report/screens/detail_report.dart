@@ -22,15 +22,12 @@ class DetailReportPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${report.fields.user}',
+              '${report.fields.bookTitle}',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text("Type        : ${report.fields.bookTitle}"),
-            const SizedBox(height: 10),
-            Text("Jumlah    : ${report.fields.comment}")
-            
-                      ],
+            Text("Comment    : ${report.fields.comment}")
+          ],
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:bookbuffet/pages/base.dart';
 import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/pages/home/screens/home.dart';
 import 'package:bookbuffet/pages/home/screens/login.dart';
@@ -58,7 +59,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => BasePage(),
                   ));
             },
           ),
