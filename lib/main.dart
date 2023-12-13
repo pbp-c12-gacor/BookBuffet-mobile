@@ -13,7 +13,7 @@ import 'package:bookbuffet/pages/MyBooks/screens/mybooks.dart';
 const primaryColor = Color(0xfff3f2ec);
 const secondaryColor = Color(0xffc4a992);
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
