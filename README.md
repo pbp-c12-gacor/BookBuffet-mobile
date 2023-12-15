@@ -5,8 +5,6 @@
   <em>📚 BookBuffet: Your Ultimate Book Database - Just Like IMDb, but for Literature! 📚   </em>
 </p>
 <p align="center">
-    <img alt="Django version" src="https://img.shields.io/static/v1?label=Django&message=%20%3E=4.2&logo=Django&color=092E20">
-    <img alt="Python version" src="https://img.shields.io/static/v1?label=Python&message=%20%3E=3.10&logo=Python&color=3776AB">
     <img alt="License" src="https://img.shields.io/github/license/pbp-c12-gacor/BookBuffet">
     <img alt="Last commit" src="https://img.shields.io/github/last-commit/pbp-c12-gacor/BookBuffet">
 </p>
@@ -36,9 +34,9 @@
 * [Muhammad Andhika Prasetya](https://github.com/andhikapraa) (2206031302)
 
 ## 📚 Latar Belakang BookBuffet 📚
-Mengingat perkembangan teknologi yang sangat pesat saat ini sehingga terjadi perubahan pola perilaku masyarakat. Kini, masyarakat cenderung menggunakan perangkat seluler dalam mengakses informasi. Hal ini dikarenakan mudahnya proses mengakses informasi apapun dari internet melalui perangkat seluler yang mereka miliki. Namun, masih terdapat tantangan yang dialami oleh masyarakat, seperti kesulitan dalam memilih buku sesuai dengan minat pribadi. BookBuffet hadir sebagai solusi untuk tantangan ini.</br>
+Mengingat perkembangan teknologi yang sangat pesat saat ini, kita dapat melihat bahwa telah terjadi perubahan signifikan dalam pola perilaku masyarakat. Kini, masyarakat cenderung menggunakan perangkat seluler dalam mengakses informasi. Hal ini dikarenakan mudahnya proses mengakses informasi apapun dari internet melalui perangkat seluler yang mereka miliki. Namun, masih terdapat tantangan yang dialami oleh masyarakat, seperti kesulitan dalam memilih buku sesuai dengan minat pribadi. BookBuffet hadir sebagai solusi untuk tantangan ini.</br>
 
-Dilengkapi dengan fitur Recommendation, BookBuffet hadir untuk memberikan informasi terkait buku-buku yang cocok dengan minat Anda. Fitur ini juga didasarkan oleh ulasan-ulasan pengguna lainnya. Tidak hanya itu, BookBuffet juga hadir dengan fitur My Books, di mana Anda dapat menyimpan judul buku-buku yang telah Anda baca dan Anda juga dapat memberikan ulasan terhadap buku tersebut. BookBuffet juga menyediakan sebuah forum diskusi di mana Anda dapat berdiskusi tentang buku sepuasnya. Selain itu, Anda juga dapat menambahkan buku Anda ke katalog yang kami miliki. Anda juga tidak perlu khawatir jika mendapati suatu kendala ketika menggunakan BookBuffet ini. Terdapat fitur Report Book yang siap membantu Anda dalam menyelesaikan masalah. Kami harap dengan adanya situs web BookBuffet ini dapat membantu Anda dalam memilih buku yang akan Anda baca.
+Dilengkapi dengan fitur Recommendation, BookBuffet hadir untuk memberikan informasi terkait buku-buku yang cocok dengan minat Anda. Fitur ini juga didasarkan oleh ulasan-ulasan pengguna lainnya. Tidak hanya itu, BookBuffet juga hadir dengan fitur My Books, di mana Anda dapat menyimpan judul buku-buku yang telah Anda baca dan Anda juga dapat memberikan ulasan terhadap buku tersebut. BookBuffet juga menyediakan sebuah forum diskusi di mana Anda dapat berdiskusi tentang buku sepuasnya. Selain itu, Anda juga dapat menambahkan buku Anda ke katalog yang kami miliki. Anda juga tidak perlu khawatir jika mendapati suatu kendala ketika menggunakan BookBuffet ini. Terdapat fitur Report Book yang siap membantu Anda dalam menyelesaikan masalah. Kami harap dengan adanya aplikasi BookBuffet ini dapat membantu Anda dalam memilih buku yang akan Anda baca.
 
 ## 🔗 Integrasi dengan Situs Web 🔗
 Berikut adalah langkah-langkah yang akan dilakukan untuk mengintegrasikan aplikasi dengan server web:
@@ -49,7 +47,7 @@ Berikut adalah langkah-langkah yang akan dilakukan untuk mengintegrasikan aplika
 4. Melakukan integrasi antara _front-end_ dengan _back-end_ dengan menggunakan konsep _asynchronous_ HTTP.
 
 ## 📂 Daftar Modul 📂
-Berikut ini beberapa modul yang digunakan pada web BookBuffet:
+Berikut ini beberapa modul yang digunakan pada aplikasi BookBuffet:
 
 ### ✨ Book Catalogue ✨
 #### Dikerjakan oleh : Muhammad Andhika Prasetya
@@ -57,7 +55,7 @@ Pada tampilan _Catalogue page_, pengguna dapat melihat buku-buku yang ada pada a
 
 ### 🗞️ Publish a New Book 🗞️
 #### Dikerjakan oleh : Ricardo Palungguk Natama
-Pada tampilan _Publish A New Book page_, pengguna _role_ `User` juga dapat meng-_upload_ suatu buku yang belum ada di katalog aplikasi BookBuffet. Akan tetapi, fitur ini akan melewati proses _screening_ dahulu oleh `Admin`. Jika proses _screening_ sudah selesai, maka buku akan di-_upload_ oleh `Admin` di web dan dapat diakses oleh semua Pengguna.
+Pada tampilan _Publish A New Book page_, pengguna _role_ `User` juga dapat meng-_upload_ suatu buku yang belum ada di katalog aplikasi BookBuffet. Akan tetapi, fitur ini akan melewati proses _screening_ dahulu oleh `Admin`. Jika proses _screening_ sudah selesai, maka buku akan di-_upload_ oleh `Admin` di aplikasi dan dapat diakses oleh semua Pengguna.
 
 ### 💬 Community Forum 💬
 #### Dikerjakan oleh : Faris Zhafir Faza
@@ -69,7 +67,7 @@ Pada tampilan My Books aplikasi BookBuffet, Pengguna bisa menyimpan _list_ buku 
 
 ### ❗ Report Book ❗
 #### Dikerjakan oleh : Fiona Ratu Maheswari
-Pengguna _role_ `User` memiliki opsi untuk me-_report_ buku agar dapat di-_remove_ dari katalog buku. Pengguna akan memilih buku yang ingin di-_report_. Lalu, Pengguna wajib memberi alasan mengapa buku tersebut harus di-_remove_. Report tersebut lalu akan di-_review_ oleh `Admin` dimana ia akan mengambil keputusan apakah buku tersebut akan di-_remove_ atau tidak. User akan menerima notifikasi mengenai _report_-nya diterima `Admin` atau tidak.
+Pengguna _role_ `User` dan `Admin` memiliki opsi untuk me-_report_ buku agar dapat ditinjau ulang oleh `Admin`. Pengguna akan memilih buku yang ingin di-_report_. Lalu, Pengguna wajib memberi alasan mengapa buku tersebut di-_report_. Report tersebut lalu akan di-_review_ oleh `Admin`. Selain itu, `Admin` juga bisa menghapus _report_ yang dibuat oleh `User` maupun `Admin`.
 
 ## 🗺️ Sumber Dataset Katalog Buku 🗺️
 Dataset yang digunakan pada aplikasi BookBuffet ini diambil dari [Google Books API](https://developers.google.com/books/docs/v1/using). Dataset ini berisi informasi mengenai buku-buku yang ada di Google Books. Dataset ini berisi informasi mengenai judul buku, penulis, tanggal publikasi, _rating_, dan deskripsi buku. Dataset ini juga berisi _cover_ buku yang dapat digunakan sebagai _thumbnail_ pada aplikasi BookBuffet.
