@@ -19,9 +19,10 @@ class _ModalBookState extends State<DropdownBook> {
   List<dynamic> books = [];
   String? selectedBook;
   String? dropdownValue;
+  String baseApiUrl = 'https://bookbuffet.onrender.com';
 
   Future<List<dynamic>> getBooks() async {
-    var url = Uri.parse('http://127.0.0.1:8000/api/books/');
+    var url = Uri.parse('$baseApiUrl/api/books/');
     var response = await http.get(
       url,
       headers: {

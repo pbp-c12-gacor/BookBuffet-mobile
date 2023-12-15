@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:bookbuffet/pages/forum/models/comment.dart';
 import 'package:bookbuffet/pages/forum/models/post.dart';
-import 'package:bookbuffet/pages/forum/screens/comment_form.dart';
+import 'package:bookbuffet/pages/forum/widgets/comment_form.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/pages/forum/utils/time_difference_formatter.dart';
-import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
+import 'package:bookbuffet/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -72,38 +72,23 @@ class _DetailPostPageState extends State<DetailPostPage> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: secondaryColor,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: primaryColor,
-                spreadRadius: 2,
-                blurRadius: 1,
-                offset: Offset(2, 3),
-              ),
-            ],
-          ),
-          child: AppBar(
-            title: Text(
-              'Book Buffet',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+      appBar: AppBar(
+        leading: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                backgroundColor: secondaryColor,
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
               ),
             ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
-          ),
+          ],
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Stack(
         children: [

@@ -4,7 +4,7 @@ import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/forum/utils/time_difference_formatter.dart';
 import 'package:bookbuffet/pages/forum/widgets/category_dropdown.dart';
 import 'package:bookbuffet/pages/forum/widgets/book_dropdown.dart';
-import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
+import 'package:bookbuffet/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

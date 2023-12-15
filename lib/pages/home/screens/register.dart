@@ -1,7 +1,7 @@
 import 'package:bookbuffet/controller/bottom_bar.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/base.dart';
-import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
+import 'package:bookbuffet/widgets/snackbar.dart';
 import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/pages/home/screens/register.dart';
 import 'package:flutter/material.dart';
