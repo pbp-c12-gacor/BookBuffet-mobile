@@ -102,6 +102,7 @@
 // }
 
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/pages/MyBooks/models/Mybook.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -111,7 +112,6 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 import 'package:bookbuffet/widgets/left-drawer.dart';
-import 'package:bookbuffet/pages/MyBooks/models/MyBook.dart';
 
 class MyBooksPage extends StatefulWidget {
   const MyBooksPage({Key? key}) : super(key: key);
