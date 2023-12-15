@@ -26,6 +26,7 @@ class CommentForm extends StatefulWidget {
 class _CommentFormState extends State<CommentForm> {
   final _commentController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  static String baseApiUrl = 'https://bookbuffet.onrender.com';
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +81,7 @@ class _CommentFormState extends State<CommentForm> {
                         : () async {
                             if (_formKey.currentState!.validate()) {
                               final response = await request.postJson(
-                                "http://127.0.0.1:8000/forum/create-comment-flutter/",
+                                '$baseApiUrl/forum/create-comment-flutter/',
                                 jsonEncode(<String, String>{
                                   'text': _commentController.text,
                                   'post_id': widget.postId,

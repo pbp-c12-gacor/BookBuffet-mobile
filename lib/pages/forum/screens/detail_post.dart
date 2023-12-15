@@ -31,11 +31,11 @@ class _DetailPostPageState extends State<DetailPostPage> {
   final _formKey = GlobalKey<FormState>();
   final _formFocusNode = FocusNode();
   final _refreshController = StreamController<void>.broadcast();
+  static String baseApiUrl = 'https://bookbuffet.onrender.com';
 
   Stream<List<Comment>> fetchComment() async* {
     while (true) {
-      var url = Uri.parse(
-          'http://127.0.0.1:8000/forum/get-comments/${widget.post.pk}/');
+      var url = Uri.parse('$baseApiUrl/forum/get-comments/${widget.post.pk}/');
       var response = await http.get(
         url,
         headers: {
@@ -58,8 +58,8 @@ class _DetailPostPageState extends State<DetailPostPage> {
   }
 
   Future<Map<String, dynamic>> getUserById(String userId) async {
-    final response = await http
-        .get(Uri.parse('http://127.0.0.1:8000/forum/get-user/$userId/'));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/forum/get-user/$userId/'));
     if (response.statusCode == 200) {
       var user = jsonDecode(utf8.decode(response.bodyBytes))[0];
       return {'id': user['pk'], 'username': user['fields']['username']};
@@ -207,7 +207,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                       final response =
                                                           await request
                                                               .postJson(
-                                                        "http://127.0.0.1:8000/forum/edit-post-flutter/${widget.post.pk}/",
+                                                        "$baseApiUrl/forum/edit-post-flutter/${widget.post.pk}/",
                                                         jsonEncode(<String,
                                                             String>{
                                                           'title': _title,
@@ -357,7 +357,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                     String id = widget.post.pk.toString();
                                     final response = await http.delete(
                                       Uri.parse(
-                                          'http://127.0.0.1:8000/forum/delete-post/$id/'),
+                                          '$baseApiUrl/forum/delete-post/$id/'),
                                       headers: <String, String>{
                                         'Content-Type':
                                             'application/json; charset=UTF-8',
@@ -533,7 +533,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                                       final response =
                                                                           await request
                                                                               .postJson(
-                                                                        "http://127.0.0.1:8000/forum/edit-comment-flutter/${snapshot.data![index].pk}/",
+                                                                        "$baseApiUrl/forum/edit-comment-flutter/${snapshot.data![index].pk}/",
                                                                         jsonEncode(<String,
                                                                             String>{
                                                                           'title':
@@ -638,7 +638,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                     final response =
                                                         await http.delete(
                                                       Uri.parse(
-                                                          'http://127.0.0.1:8000/forum/delete-comment/$id/'),
+                                                          '$baseApiUrl/forum/delete-comment/$id/'),
                                                       headers: <String, String>{
                                                         'Content-Type':
                                                             'application/json; charset=UTF-8',
