@@ -26,10 +26,11 @@ class ForumPageState extends State<ForumPage> {
   List<Post> posts = [];
   int? IdBookSelected;
   late Future<List<Post>> initialFetch;
+  static String baseApiUrl = 'https://bookbuffet.onrender.com';
 
   Future<Map<String, dynamic>> getBookById(String bookId) async {
     final response =
-        await http.get(Uri.parse('http://127.0.0.1:8000/api/books/$bookId/'));
+        await http.get(Uri.parse('$baseApiUrl/api/books/$bookId/'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -46,8 +47,8 @@ class ForumPageState extends State<ForumPage> {
   }
 
   Future<Map<String, dynamic>> getUserById(String userId) async {
-    final response = await http
-        .get(Uri.parse('http://127.0.0.1:8000/forum/get-user/$userId/'));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/forum/get-user/$userId/'));
     if (response.statusCode == 200) {
       var user = jsonDecode(utf8.decode(response.bodyBytes))[0];
       return {'id': user['pk'], 'username': user['fields']['username']};
@@ -66,7 +67,7 @@ class ForumPageState extends State<ForumPage> {
   }
 
   Future<List<Post>> fetchPost(String? category) async {
-    var url = Uri.parse('http://127.0.0.1:8000/forum/post/json/');
+    var url = Uri.parse('$baseApiUrl/forum/post/json/');
     var response = await http.get(
       url,
       headers: {
@@ -285,7 +286,7 @@ class ForumPageState extends State<ForumPage> {
                                                                             .validate()) {
                                                                           final response =
                                                                               await request.postJson(
-                                                                            "http://127.0.0.1:8000/forum/edit-post-flutter/${posts[index].pk}/",
+                                                                            "$baseApiUrl/forum/edit-post-flutter/${posts[index].pk}/",
                                                                             jsonEncode(<String,
                                                                                 String>{
                                                                               'title': _title,
@@ -393,7 +394,7 @@ class ForumPageState extends State<ForumPage> {
                                                         final response =
                                                             await http.delete(
                                                           Uri.parse(
-                                                              'http://127.0.0.1:8000/forum/delete-post/$id/'),
+                                                              '$baseApiUrl/forum/delete-post/$id/'),
                                                           headers: <String,
                                                               String>{
                                                             'Content-Type':
@@ -560,7 +561,7 @@ class ForumPageState extends State<ForumPage> {
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   final response = await request.postJson(
-                                    "http://127.0.0.1:8000/forum/create-post-flutter/",
+                                    "$baseApiUrl/forum/create-post-flutter/",
                                     jsonEncode(<String, String>{
                                       'title': _title,
                                       'text': _text,
