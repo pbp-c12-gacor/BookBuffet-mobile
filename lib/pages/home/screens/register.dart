@@ -1,7 +1,7 @@
 import 'package:bookbuffet/controller/bottom_bar.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/base.dart';
-import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
+import 'package:bookbuffet/widgets/snackbar.dart';
 import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/pages/home/screens/register.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
   final TextEditingController _referralCodeController = TextEditingController();
   String? _selectedRole;
+  static String baseApiUrl = 'https://bookbuffet.onrender.com';
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
@@ -268,8 +269,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       );
                       return;
                     }
-                    final response = await request
-                        .post("http://127.0.0.1:8000/auth/register/", {
+                    final response =
+                        await request.post("$baseApiUrl/auth/register/", {
                       'username': username,
                       'password': password,
                       'role': role,

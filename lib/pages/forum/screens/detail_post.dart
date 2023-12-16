@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:bookbuffet/pages/forum/models/comment.dart';
 import 'package:bookbuffet/pages/forum/models/post.dart';
-import 'package:bookbuffet/pages/forum/screens/comment_form.dart';
+import 'package:bookbuffet/pages/forum/widgets/comment_form.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/pages/forum/utils/time_difference_formatter.dart';
-import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
+import 'package:bookbuffet/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -31,11 +31,11 @@ class _DetailPostPageState extends State<DetailPostPage> {
   final _formKey = GlobalKey<FormState>();
   final _formFocusNode = FocusNode();
   final _refreshController = StreamController<void>.broadcast();
+  static String baseApiUrl = 'https://bookbuffet.onrender.com';
 
   Stream<List<Comment>> fetchComment() async* {
     while (true) {
-      var url = Uri.parse(
-          'http://127.0.0.1:8000/forum/get-comments/${widget.post.pk}/');
+      var url = Uri.parse('$baseApiUrl/forum/get-comments/${widget.post.pk}/');
       var response = await http.get(
         url,
         headers: {
@@ -58,8 +58,8 @@ class _DetailPostPageState extends State<DetailPostPage> {
   }
 
   Future<Map<String, dynamic>> getUserById(String userId) async {
-    final response = await http
-        .get(Uri.parse('http://127.0.0.1:8000/forum/get-user/$userId/'));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/forum/get-user/$userId/'));
     if (response.statusCode == 200) {
       var user = jsonDecode(utf8.decode(response.bodyBytes))[0];
       return {'id': user['pk'], 'username': user['fields']['username']};
@@ -72,38 +72,23 @@ class _DetailPostPageState extends State<DetailPostPage> {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: secondaryColor,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: primaryColor,
-                spreadRadius: 2,
-                blurRadius: 1,
-                offset: Offset(2, 3),
-              ),
-            ],
-          ),
-          child: AppBar(
-            title: Text(
-              'Book Buffet',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+      appBar: AppBar(
+        leading: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                backgroundColor: secondaryColor,
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
               ),
             ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
-          ),
+          ],
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Stack(
         children: [
@@ -207,7 +192,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                       final response =
                                                           await request
                                                               .postJson(
-                                                        "http://127.0.0.1:8000/forum/edit-post-flutter/${widget.post.pk}/",
+                                                        "$baseApiUrl/forum/edit-post-flutter/${widget.post.pk}/",
                                                         jsonEncode(<String,
                                                             String>{
                                                           'title': _title,
@@ -357,7 +342,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                     String id = widget.post.pk.toString();
                                     final response = await http.delete(
                                       Uri.parse(
-                                          'http://127.0.0.1:8000/forum/delete-post/$id/'),
+                                          '$baseApiUrl/forum/delete-post/$id/'),
                                       headers: <String, String>{
                                         'Content-Type':
                                             'application/json; charset=UTF-8',
@@ -533,7 +518,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                                       final response =
                                                                           await request
                                                                               .postJson(
-                                                                        "http://127.0.0.1:8000/forum/edit-comment-flutter/${snapshot.data![index].pk}/",
+                                                                        "$baseApiUrl/forum/edit-comment-flutter/${snapshot.data![index].pk}/",
                                                                         jsonEncode(<String,
                                                                             String>{
                                                                           'title':
@@ -638,7 +623,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
                                                     final response =
                                                         await http.delete(
                                                       Uri.parse(
-                                                          'http://127.0.0.1:8000/forum/delete-comment/$id/'),
+                                                          '$baseApiUrl/forum/delete-comment/$id/'),
                                                       headers: <String, String>{
                                                         'Content-Type':
                                                             'application/json; charset=UTF-8',
