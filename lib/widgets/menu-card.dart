@@ -4,7 +4,7 @@ import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/pages/report/main.dart';
-import 'package:bookbuffet/pages/publish/main.dart';
+import 'package:bookbuffet/pages/publish/screens/main.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
