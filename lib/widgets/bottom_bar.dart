@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class BottomBar extends StatelessWidget {
-  const BottomBar({super.key});
-  @override
+  final int initialIndex;
+  const BottomBar({key, this.initialIndex = 0}) : super(key: key);
   Widget build(BuildContext context) {
-    BottomBarController controller = Get.put(BottomBarController());
+    BottomBarController controller = Get.find();
     return Container(
         decoration: const BoxDecoration(
           color: secondaryColor,
@@ -33,6 +33,7 @@ class BottomBar extends StatelessWidget {
             activeColor: primaryColor,
             tabBackgroundColor: Colors.grey.shade800,
             gap: 8,
+            selectedIndex: controller.index.value,
             tabs: const [
               GButton(
                 icon: Icons.home,
