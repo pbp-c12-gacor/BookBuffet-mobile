@@ -74,7 +74,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("images/bg.png"),
+          image: AssetImage("assets/images/bg.png"),
           fit: BoxFit.fill,
         ),
       ),

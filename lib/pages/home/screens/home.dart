@@ -92,7 +92,7 @@ class _HomePageState extends State<MyHomePage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/bg.png"),
+            image: AssetImage("assets/images/bg.png"),
             fit: BoxFit.fill,
           ),
         ),
@@ -363,7 +363,7 @@ class _HomePageState extends State<MyHomePage> {
                             child: Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: AssetImage("images/bg.png"),
+                                  image: AssetImage("assets/images/bg.png"),
                                   fit: BoxFit.fill,
                                 ),
                               ),
