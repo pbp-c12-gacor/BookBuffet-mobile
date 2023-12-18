@@ -23,11 +23,17 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: "Book ",
-                    style: TextStyle(fontSize: 40),
+                    style: TextStyle(
+                        fontSize: 45,
+                        color: secondaryColor,
+                        fontWeight: FontWeight.w800),
                   ),
                   TextSpan(
                     text: "Buffet",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40,
+                        color: Colors.black),
                   ),
                 ],
               ),
