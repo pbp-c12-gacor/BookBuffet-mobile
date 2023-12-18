@@ -54,7 +54,7 @@ class _DropdownState extends State<Dropdown> {
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             padding: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-              color: primaryColor,
+              color: primaryColor.withOpacity(0.7),
               borderRadius: BorderRadius.circular(5.0),
             ),
             child: Stack(

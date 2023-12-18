@@ -22,7 +22,7 @@ void showCustomSnackBar(BuildContext context, String message,
     dismissDirection: DismissDirection.horizontal,
     behavior: SnackBarBehavior.floating,
     margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height, left: 10, right: 10),
+        bottom: MediaQuery.of(context).size.height - 150, left: 10, right: 10),
     duration: Duration(seconds: 4), // Durasi tampilan SnackBar
   ));
 }

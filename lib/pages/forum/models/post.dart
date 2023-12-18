@@ -14,18 +14,19 @@ class Post {
   String model;
   int pk;
   Fields fields;
-
+  int commentCount;
   Post({
     required this.model,
     required this.pk,
     required this.fields,
+    required this.commentCount,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
-        model: json["model"],
-        pk: json["pk"],
-        fields: Fields.fromJson(json["fields"]),
-      );
+      model: json["model"],
+      pk: json["pk"],
+      fields: Fields.fromJson(json["fields"]),
+      commentCount: json['commentCount']);
 
   Map<String, dynamic> toJson() => {
         "model": model,
