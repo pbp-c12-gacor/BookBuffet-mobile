@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/bitmap.png"),
+            image: AssetImage("assets/images/Bitmap.png"),
             fit: BoxFit.fill,
           ),
         ),
