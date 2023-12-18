@@ -362,7 +362,10 @@ class _PublishPageState extends State<PublishPage> {
                             'categories': categoriesController.text,
                             'language': languageController.text,
                             'preview_link': previewLinkController.text,
-                            'cover': fileName,
+                            'cover': {
+                              'file': base64Image,
+                              'name': fileName,
+                            },
                             'isbn_10': isbn10Controller.text,
                             'isbn_13': isbn13Controller.text,
                           },
