@@ -24,10 +24,11 @@ class _ReportPageState extends State<ReportPage> {
   String input = "";
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();
+  static String baseApiUrl = 'https://bookbuffet.onrender.com';
 
   Future<Map<String, dynamic>> getBookById(String bookId) async {
     final response =
-        await http.get(Uri.parse('http://127.0.0.1:8000/api/books/$bookId/'));
+        await http.get(Uri.parse('$baseApiUrl/api/books/$bookId/'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -38,7 +39,7 @@ class _ReportPageState extends State<ReportPage> {
 
   Future<Map<String, dynamic>> getUserById(String userId) async {
     final response = await http
-        .get(Uri.parse('http://127.0.0.1:8000/report/get-user/$userId/'));
+        .get(Uri.parse('$baseApiUrl/report/get-user/$userId/'));
     if (response.statusCode == 200) {
       var user = jsonDecode(utf8.decode(response.bodyBytes))[0];
       return {'id': user['pk'], 'username': user['fields']['username']};
@@ -49,7 +50,7 @@ class _ReportPageState extends State<ReportPage> {
 
   Future<List<String>> searchBooks(String input) async {
     final response = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/search/?search=title:${input}'));
+        Uri.parse('$baseApiUrl/api/search?search=title:$input'));
     var data = jsonDecode(utf8.decode(response.bodyBytes));
     List<String> bookTitles = [];
     for (var a in data) {
@@ -140,7 +141,7 @@ class _ReportPageState extends State<ReportPage> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 final response = await request.postJson(
-                                    "http://127.0.0.1:8000/report/create-report-flutter/",
+                                    "https://bookbuffet.onrender.com/report/create-report-flutter/",
                                     jsonEncode(<String, String>{
                                       'book_title': _controller2.text,
                                       'comment': _comment,

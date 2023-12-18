@@ -20,7 +20,7 @@ class _ShowReportsPageState extends State<ShowReportsPage> {
 
   Future<List<Report>> fetchReports() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse('http://127.0.0.1:8000/report/json/');
+    var url = Uri.parse('https://bookbuffet.onrender.com/report/json/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
