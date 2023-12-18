@@ -1,11 +1,17 @@
 import 'package:bookbuffet/controller/bottom_bar.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/base.dart';
+import 'package:bookbuffet/pages/catalog/models/book.dart';
+import 'package:bookbuffet/pages/catalog/models/rating.dart';
+import 'package:bookbuffet/pages/catalog/screens/book_detail.dart';
 import 'package:bookbuffet/pages/catalog/screens/catalog.dart';
+import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
+import 'package:bookbuffet/pages/catalog/widgets/book_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -15,6 +21,57 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<MyHomePage> {
+  static String baseApiUrl = 'https://bookbuffet.onrender.com/api';
+  late Future<List<Book>> _books;
+  late Future<List<Book>> _booksSorted;
+
+  static Future<List<Book>> getBooks() async {
+    final response = await http.get(Uri.parse('$baseApiUrl/books/'));
+    if (response.statusCode == 200) {
+      List<Book> books = bookFromJson(response.body);
+      if (books.length > 8) {
+        books = books.take(8).toList();
+      }
+      return books;
+    } else {
+      throw Exception('Failed to load books');
+    }
+  }
+
+  static Future<List<Book>> getBooksSorted() async {
+    final response = await http.get(Uri.parse('$baseApiUrl/books/'));
+    if (response.statusCode == 200) {
+      List<Book> books = bookFromJson(response.body);
+      Map<Book, double> bookRatings = {};
+      for (var book in books) {
+        List<Rating> ratings = await ApiService.getRatingsByBook(book.id);
+        double meanRating = _getMeanRating(ratings);
+        bookRatings[book] = meanRating;
+      }
+      books.sort((a, b) => bookRatings[b]!.compareTo(bookRatings[a]!));
+      books = books.take(8).toList();
+      return books;
+    } else {
+      throw Exception('Failed to load books');
+    }
+  }
+
+  static double _getMeanRating(List<Rating> ratings) {
+    double meanRating = 0;
+    for (var rating in ratings) {
+      meanRating += rating.rating;
+    }
+    meanRating = meanRating / ratings.length;
+    return meanRating;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _books = getBooks();
+    _booksSorted = getBooksSorted();
+  }
+
   BottomBarController controller = Get.find();
   @override
   Widget build(BuildContext context) {
@@ -22,11 +79,14 @@ class _HomePageState extends State<MyHomePage> {
     String greeting = "Halo";
     String username = "User";
     String initial = "U";
+    int _length = 0;
+
     if (request.loggedIn && request.jsonData.isNotEmpty) {
       username = request.jsonData["username"] ?? "User";
       initial = username.isNotEmpty ? username[0].toUpperCase() : "U";
       greeting += ', ${username}';
     }
+
     var size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
@@ -84,10 +144,10 @@ class _HomePageState extends State<MyHomePage> {
                 SizedBox(
                   height: 30,
                 ),
-                specialForYou(),
-                SizedBox(
-                  height: 30,
-                )
+                // specialForYou(),
+                // SizedBox(
+                //   height: 30,
+                // )
               ],
             ),
           ),
@@ -193,6 +253,51 @@ class _HomePageState extends State<MyHomePage> {
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
+        ),
+        FutureBuilder<List<Book>>(
+          future: _booksSorted,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Book> books = snapshot.data!;
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: books.map((book) {
+                    return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BookDetail(book: book),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            child: Column(
+                              children: <Widget>[
+                                Image.network(book
+                                    .cover), // asumsikan setiap buku memiliki cover
+                                Text(book
+                                    .title), // asumsikan setiap buku memiliki title
+                                // tambahkan lebih banyak detail buku di sini jika diperlukan
+                              ],
+                            ),
+                          ),
+                        ));
+                  }).toList(),
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text('Something went wrong!'),
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         )
       ],
     );
@@ -225,7 +330,7 @@ class _HomePageState extends State<MyHomePage> {
                   iconSize: 14,
                 )
               ],
-            )
+            ),
           ],
         ),
         SizedBox(
@@ -233,6 +338,75 @@ class _HomePageState extends State<MyHomePage> {
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
+        ),
+        FutureBuilder<List<Book>>(
+          future: _books,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Book> books = snapshot.data!;
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: books.map((book) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BookDetail(book: book),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage("images/bg.png"),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              height: 250, // Tinggi kartu
+                              width: 200, // Lebar kartu
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .center, // Pusatkan konten kolom
+                                children: <Widget>[
+                                  Center(
+                                    // Pusatkan gambar
+                                    child: Image.network(
+                                      book.cover,
+                                      fit: BoxFit
+                                          .cover, // Gambar akan menyesuaikan ukuran container
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      book.title,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow
+                                          .ellipsis, // Tambahkan ini
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                    );
+                  }).toList(),
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text('Something went wrong!'),
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         )
       ],
     );

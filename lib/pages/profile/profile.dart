@@ -46,103 +46,122 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     return SafeArea(
-      child: Scaffold(
-          body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(40),
-          child: Column(
-            children: [
-              /// -- IMAGE
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundColor: secondaryColor,
-                    child: Text(
-                      initial,
-                      style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Text(username, style: Theme.of(context).textTheme.headline4),
-              const SizedBox(height: 20),
-              if (!request.loggedIn) ...[
-                ProfileMenuWidget(
-                    title: "Sign In",
-                    icon: Icons.login,
-                    onPress: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    }),
-                const SizedBox(height: 10),
-                ProfileMenuWidget(
-                    title: "Sign Up",
-                    icon: Icons.app_registration,
-                    onPress: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => RegisterPage()),
-                      );
-                    }),
-                const SizedBox(height: 10),
-              ] else ...[
-                ProfileMenuWidget(
-                    title: "Show Report",
-                    icon: Icons.report_sharp,
-                    onPress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ShowReportsPage()),
-                      );
-                    }),
-                const SizedBox(height: 10),
-                ProfileMenuWidget(
-                    title: "Report Book", icon: Icons.report, onPress: () {}),
-                const SizedBox(height: 10),
-                ProfileMenuWidget(
-                    title: "My Books", icon: Icons.book, onPress: () {}),
-                const SizedBox(height: 10),
-                ProfileMenuWidget(
-                    title: "Publish Book", icon: Icons.publish, onPress: () {}),
-                const SizedBox(height: 10),
-                ProfileMenuWidget(
-                    title: "Logout",
-                    icon: Icons.logout,
-                    textColor: Colors.red,
-                    endIcon: false,
-                    onPress: () async {
-                      final response =
-                          await request.logout("$baseApiUrl/auth/logout/");
-                      String message = response["message"];
-                      if (response['status']) {
-                        String uname = response["username"];
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("$message Sampai jumpa, $uname."),
-                        ));
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("$message"),
-                        ));
-                      }
-                    }),
-              ],
-            ],
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/bitmap.png"),
+            fit: BoxFit.fill,
           ),
         ),
-      )),
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(40),
+                child: Column(
+                  children: [
+                    /// -- IMAGE
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundColor: secondaryColor.withOpacity(0.7),
+                          child: Text(
+                            initial,
+                            style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(username,
+                        style: Theme.of(context).textTheme.headline4),
+                    const SizedBox(height: 20),
+                    if (!request.loggedIn) ...[
+                      ProfileMenuWidget(
+                          title: "Sign In",
+                          icon: Icons.login,
+                          onPress: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
+                            );
+                          }),
+                      const SizedBox(height: 10),
+                      ProfileMenuWidget(
+                          title: "Sign Up",
+                          icon: Icons.app_registration,
+                          onPress: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterPage()),
+                            );
+                          }),
+                      const SizedBox(height: 10),
+                    ] else ...[
+                      ProfileMenuWidget(
+                          title: "Show Report",
+                          icon: Icons.report_sharp,
+                          onPress: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ShowReportsPage()),
+                            );
+                          }),
+                      const SizedBox(height: 10),
+                      ProfileMenuWidget(
+                          title: "Report Book",
+                          icon: Icons.report,
+                          onPress: () {}),
+                      const SizedBox(height: 10),
+                      ProfileMenuWidget(
+                          title: "My Books", icon: Icons.book, onPress: () {}),
+                      const SizedBox(height: 10),
+                      ProfileMenuWidget(
+                          title: "Publish Book",
+                          icon: Icons.publish,
+                          onPress: () {}),
+                      const SizedBox(height: 10),
+                      ProfileMenuWidget(
+                          title: "Logout",
+                          icon: Icons.logout,
+                          textColor: Colors.red,
+                          endIcon: false,
+                          onPress: () async {
+                            final response = await request
+                                .logout("$baseApiUrl/auth/logout/");
+                            String message = response["message"];
+                            if (response['status']) {
+                              String uname = response["username"];
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("$message Sampai jumpa, $uname."),
+                              ));
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("$message"),
+                              ));
+                            }
+                          }),
+                    ],
+                  ],
+                ),
+              ),
+            )),
+      ),
     );
   }
 }

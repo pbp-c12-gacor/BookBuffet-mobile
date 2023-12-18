@@ -30,7 +30,9 @@ class _BasePageState extends State<BasePage> {
     controller.index.value = widget.initialIndex;
     return Obx(() => Scaffold(
           body: controller.pages[controller.index.value],
-          bottomNavigationBar: BottomBar(),
+          bottomNavigationBar: BottomBar(
+            initialIndex: 0,
+          ),
         ));
   }
 }
