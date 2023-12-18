@@ -13,7 +13,8 @@ class Dropdown extends StatefulWidget {
 }
 
 Future<List<String>> getCategories() async {
-  var url = Uri.parse('http://127.0.0.1:8000/api/categories/');
+  String baseApiUrl = 'https://bookbuffet.onrender.com';
+  var url = Uri.parse('$baseApiUrl/api/categories/');
   var response = await http.get(
     url,
     headers: {
@@ -53,7 +54,7 @@ class _DropdownState extends State<Dropdown> {
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             padding: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-              color: primaryColor,
+              color: primaryColor.withOpacity(0.7),
               borderRadius: BorderRadius.circular(5.0),
             ),
             child: Stack(

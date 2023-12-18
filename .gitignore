@@ -10,9 +10,8 @@
 .svn/
 migrate_working_dir/
 
-key.properties
-**/*.keystore
-**/*.jks
+*.keystore
+*.jks
 
 # IntelliJ related
 *.iml
@@ -47,7 +46,3 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-/.gradle
-/captures/
-/local.properties
-GeneratedPluginRegistrant.java

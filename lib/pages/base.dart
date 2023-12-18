@@ -27,9 +27,12 @@ class _BasePageState extends State<BasePage> {
   @override
   Widget build(BuildContext context) {
     BottomBarController controller = Get.put(BottomBarController());
+    controller.index.value = widget.initialIndex;
     return Obx(() => Scaffold(
           body: controller.pages[controller.index.value],
-          bottomNavigationBar: BottomBar(),
+          bottomNavigationBar: BottomBar(
+            initialIndex: 0,
+          ),
         ));
   }
 }
