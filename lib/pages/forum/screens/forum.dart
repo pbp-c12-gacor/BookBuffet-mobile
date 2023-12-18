@@ -121,7 +121,7 @@ class ForumPageState extends State<ForumPage> {
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("images/bg.png"),
+              image: AssetImage("assets/images/bg.png"),
               fit: BoxFit.fill,
             ),
           ),
