@@ -1,4 +1,4 @@
-import 'package:bookbuffet/pages/MyBooks/models/mybook.dart';
+import 'package:bookbuffet/pages/MyBooks/models/Mybook.dart';
 import 'package:bookbuffet/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
