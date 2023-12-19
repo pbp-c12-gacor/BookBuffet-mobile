@@ -1,4 +1,5 @@
-import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/pages/MyBooks/utils/mybook_card.dart';
+import 'package:bookbuffet/pages/catalog/screens/catalog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -7,10 +8,7 @@ import 'dart:convert';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
-import 'package:bookbuffet/widgets/left-drawer.dart';
 import 'package:bookbuffet/pages/MyBooks/models/mybook.dart';
-import 'package:bookbuffet/pages/catalog/screens/catalog.dart';
-import 'package:bookbuffet/pages/MyBooks/utils/mybook_card.dart';
 
 class MyBooksPage extends StatefulWidget {
   const MyBooksPage({Key? key}) : super(key: key);
@@ -22,11 +20,11 @@ class MyBooksPage extends StatefulWidget {
 class BookPageState extends State<MyBooksPage> {
   Future<List<MyBook>> getMyBooks() async {
     final request = context.watch<CookieRequest>();
-    print(request.jsonData);
-    var response =
-        await request.get('http://127.0.0.1:8000/MyBooks/get-my-books-json/');
+    // print(request.jsonData);
+    var response = await request
+        .get('https://bookbuffet.onrender.com/MyBooks/get-my-books-json/');
+    // print(response);
     String data = jsonEncode(response);
-    // print(data);
 
     if (response != null) {
       final books = myBookFromJson(data);
@@ -39,6 +37,25 @@ class BookPageState extends State<MyBooksPage> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+    // Future<List<MyBook>> response = request
+    //     .postJson("http://127.0.0.1:8000/MyBooks/get-mybooks/",
+    //         jsonEncode(<String, String>{"Content-Type": "application/json"}))
+    //     .then((value) {
+    //   if (value == null) {
+    //     return [];
+    //   }
+    //   print(response.body);
+    //   var jsonValue = jsonDecode(value);
+    //   List<MyBook> listMyBook = [];
+    //   for (var data in jsonValue) {
+    //     if (data != null) {
+    //       listMyBook.add(MyBook.fromJson(data));
+    //     }
+    //   }
+    //   return listMyBook;
+    // });
+
     return Scaffold(
         appBar: AppBar(
           title: Text('My Books'),
@@ -66,6 +83,7 @@ class BookPageState extends State<MyBooksPage> {
               if (snapshot.hasData) {
                 List<MyBook> books = snapshot.data!;
                 return GridView.builder(
+                  physics: AlwaysScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1,
                     childAspectRatio: 0.8 / 1,

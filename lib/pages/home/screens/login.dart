@@ -1,7 +1,7 @@
 import 'package:bookbuffet/controller/bottom_bar.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/base.dart';
-import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
+import 'package:bookbuffet/widgets/snackbar.dart';
 import 'package:bookbuffet/pages/home/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  static String baseApiUrl = 'https://bookbuffet.onrender.com';
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
@@ -60,9 +61,11 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 10,
               ),
-              Text(
-                "Welcome back, you've been missed",
-                style: TextStyle(fontSize: 24),
+              Center(
+                child: Text(
+                  "Welcome back, you've been missed",
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -134,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                   String username = _usernameController.text;
                   String password = _passwordController.text;
                   final response =
-                      await request.login("http://127.0.0.1:8000/auth/login/", {
+                      await request.login("$baseApiUrl/auth/login/", {
                     'username': username,
                     'password': password,
                   });

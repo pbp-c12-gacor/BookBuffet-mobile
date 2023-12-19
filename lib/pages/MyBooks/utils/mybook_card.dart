@@ -1,10 +1,9 @@
 import 'package:bookbuffet/pages/MyBooks/models/mybook.dart';
-import 'package:bookbuffet/pages/forum/widgets/snackbar.dart';
+import 'package:bookbuffet/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:bookbuffet/pages/MyBooks/models/mybook.dart';
 import 'package:bookbuffet/pages/MyBooks/models/bookReview.dart';
 import 'package:bookbuffet/pages/MyBooks/screens/reviews.dart';
 // import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
@@ -21,8 +20,8 @@ class MyBookCard extends StatelessWidget {
   Future<List<BookReview>> getBook(BuildContext context, int id) async {
     final request = context.watch<CookieRequest>();
     // print("SEPARATOR");
-    final response =
-        await request.get(('http://127.0.0.1:8000/MyBooks/get-book-json/$id/'));
+    final response = await request
+        .get(('https://bookbuffet.onrender.com/MyBooks/get-book-json/$id/'));
     // print(response);
     // final response = await http
     //     .get(Uri.parse('https://bookbuffet.onrender.com/api/books/10/'));
@@ -120,7 +119,7 @@ class MyBookCard extends StatelessWidget {
 //                 .toString();
                 // print(book.pk);
                 final response = await request.postJson(
-                  'http://127.0.0.1:8000/MyBooks/delete-mybooks-flutter/${book.pk}/',
+                  'https://bookbuffet.onrender.com/MyBooks/delete-mybooks-flutter/${book.pk}/',
                   jsonEncode({
                     "book_id": book.pk,
                   }),

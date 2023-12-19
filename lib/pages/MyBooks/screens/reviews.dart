@@ -42,7 +42,7 @@ class ReviewState extends State<ReviewPage> {
     // username = request['username'];
 
     var response = await request.postJson(
-        'http://127.0.0.1:8000/MyBooks/add-review-flutter/${book.pk}/',
+        'https://bookbuffet.onrender.com/MyBooks/add-review-flutter/${book.pk}/',
         jsonEncode(<String, String>{
           'review': _reviewController.text,
           'rating': _rating.toString(),
@@ -110,7 +110,7 @@ class ReviewState extends State<ReviewPage> {
   void _delete() async {
     final request = Provider.of<CookieRequest>(context, listen: false);
     final response = await request.postJson(
-      'http://127.0.0.1:8000/MyBooks/show-review/delete-review-flutter/${book.pk}/',
+      'https://bookbuffet.onrender.com/MyBooks/show-review/delete-review-flutter/${book.pk}/',
       jsonEncode({
         "book_id": book.pk,
       }),
@@ -132,7 +132,7 @@ class ReviewState extends State<ReviewPage> {
 
   Future<List<Review>> getReviews() async {
     var url = Uri.parse(
-        'http://127.0.0.1:8000/MyBooks/show-review/get-reviews-flutter/${book.pk}');
+        'https://bookbuffet.onrender.com/MyBooks/show-review/get-reviews-flutter/${book.pk}');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -197,6 +197,7 @@ class ReviewState extends State<ReviewPage> {
           );
 
           Widget reviewWidget = ListView.builder(
+            physics: AlwaysScrollableScrollPhysics(),
             itemCount: reviews.length,
             itemBuilder: (_, index) {
               final review = reviews[index];
