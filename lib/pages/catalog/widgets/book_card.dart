@@ -92,58 +92,109 @@ class BookCard extends StatelessWidget {
                   );
                 }
               },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Stack(
                 children: [
-                  // Add a book cover image
-                  Expanded(
-                    child: CachedNetworkImage(
-                      imageUrl: book.cover,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                    ),
-                  ),
-                  // Add a book title
-                  Text(
-                    book.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Raleway',
-                    ),
-                  ),
-                  // Add a book authors
-                  // If there are more than one author,
-                  // just show the first one
-                  // followed by 'et al.'
-                  Text(
-                    book.authors.length > 1
-                        ? '${book.authors[0].name} et al.'
-                        : book.authors[0].name,
-                    textAlign: TextAlign.center,
-                  ),
-                  // Add a mean rating
-                  // If there are no ratings, show '0 ⭐ (0)'
-                  // If there are ratings, show the mean rating
-                  // followed by the number of ratings in brackets
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        ratings.isEmpty ? '0' : meanRating.toStringAsFixed(1),
+                      // Add a book cover image
+                      Expanded(
+                        child: CachedNetworkImage(
+                          imageUrl: book.cover,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
                       ),
-                      const Icon(
-                        Icons.star,
-                        color: Colors.yellow,
-                      ),
+                      // Add a book title
                       Text(
-                        ' (${ratings.length})',
-                      )
+                        book.title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Raleway',
+                        ),
+                      ),
+                      // Add a book authors
+                      // If there are more than one author,
+                      // just show the first one
+                      // followed by 'et al.'
+                      Text(
+                        book.authors.length > 1
+                            ? '${book.authors[0].name} et al.'
+                            : book.authors[0].name,
+                        textAlign: TextAlign.center,
+                      ),
+                      // Add a mean rating
+                      // If there are no ratings, show '0 ⭐ (0)'
+                      // If there are ratings, show the mean rating
+                      // followed by the number of ratings in brackets
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            ratings.isEmpty
+                                ? '0'
+                                : meanRating.toStringAsFixed(1),
+                          ),
+                          const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          ),
+                          Text(
+                            ' (${ratings.length})',
+                          )
+                        ],
+                      ),
                     ],
-                  )
+                  ),
+                  // Add a bookmarket icon to show
+                  // if the book is in My Books
+                  // or not
+                  // And position it to the top right corner
+                  // of the card
+                  // Only show the icon
+                  // Don't make it clickable
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Consumer<CookieRequest>(
+                      builder: (context, cookieRequest, child) {
+                        bool isLoggedIn =
+                            UserApiService.isLoggedin(cookieRequest);
+                        if (isLoggedIn) {
+                          return FutureBuilder<bool>(
+                            future: UserApiService.isBookInMyBooks(
+                                cookieRequest, book.id),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                bool isBookInMyBooks = snapshot.data!;
+                                return Icon(
+                                  isBookInMyBooks
+                                      ? Icons.bookmark
+                                      : Icons.bookmark_border,
+                                  color: Colors.orange,
+                                );
+                              } else if (snapshot.hasError) {
+                                return const Icon(
+                                  Icons.bookmark_border,
+                                  color: Colors.orange,
+                                );
+                              }
+                              return const CircularProgressIndicator();
+                            },
+                          );
+                        } else {
+                          return const Icon(
+                            Icons.bookmark_border,
+                            color: Colors.orange,
+                          );
+                        }
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),

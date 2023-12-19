@@ -115,12 +115,12 @@ class _BookDetailState extends State<BookDetail> {
                       },
                       icon: isBookInMyBooks
                           ? const Icon(
-                              Icons.bookmark_remove,
+                              Icons.bookmark,
                               color: Colors.orange,
                             )
                           : const Icon(
-                              Icons.bookmark_add,
-                              color: Colors.grey,
+                              Icons.bookmark_outline,
+                              color: Colors.orange,
                             ),
                     );
                   } else if (snapshot.hasError) {
@@ -146,6 +146,7 @@ class _BookDetailState extends State<BookDetail> {
                 },
                 icon: const Icon(
                   Icons.login,
+                  color: Colors.orange,
                 ),
               ),
             ],
@@ -180,27 +181,33 @@ class _BookDetailState extends State<BookDetail> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      widget.book.title,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                    RichText(
+                                      text: TextSpan(
+                                        text: widget.book.title,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    ExpandableText(
-                                      widget.book.subtitle,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                      expandText: 'more',
-                                      collapseText: 'less',
-                                      maxLines: 2,
-                                      linkColor: Colors.blue,
-                                    ),
+                                    widget.book.subtitle == ""
+                                        ? const SizedBox.shrink()
+                                        : const SizedBox(
+                                            height: 8,
+                                          ),
+                                    widget.book.subtitle == ""
+                                        ? const SizedBox.shrink()
+                                        : ExpandableText(
+                                            widget.book.subtitle,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                            expandText: 'more',
+                                            collapseText: 'less',
+                                            maxLines: 2,
+                                            linkColor: Colors.blue,
+                                          ),
                                     const SizedBox(
                                       height: 8,
                                     ),
