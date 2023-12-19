@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:bookbuffet/pages/catalog/models/category.dart';
 import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
@@ -13,18 +15,38 @@ class Catalog extends StatefulWidget {
 }
 
 class _CatalogState extends State<Catalog> {
-  late Future<List<Book>> _books;
-  late Future<List<Category>> _categories;
+  late Future<List<Book>> _books = ApiService.getBooks();
+  late Future<List<Category>> _categories = ApiService.getCategories();
   int _length = 0;
 
   @override
   void initState() {
     super.initState();
-    _books = ApiService.getBooks();
-    _categories = ApiService.getCategories();
-    // Get the number of categories
-    // to generate the tabs
+    loadData();
+  }
+
+  void loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('books') != null) {
+      _books = Future.value(List<Book>.from(
+          jsonDecode(prefs.getString('books')!).map((x) => Book.fromJson(x))));
+    }
+    if (prefs.getString('categories') != null) {
+      _categories = Future.value(List<Category>.from(
+          jsonDecode(prefs.getString('categories')!)
+              .map((x) => Category.fromJson(x))));
+    }
     _categories.then((value) => _length = value.length);
+  }
+
+  void saveCategories(List<Category> categories) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('categories', jsonEncode(categories));
+  }
+
+  void saveBooks(List<Book> books) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('books', jsonEncode(books));
   }
 
   @override
@@ -35,13 +57,15 @@ class _CatalogState extends State<Catalog> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Category> categories = snapshot.data!;
+            saveCategories(categories);
             return DefaultTabController(
               // Add tabs as per the number of categories
               // calculated from the API
               length: _length + 1,
               child: Scaffold(
                 appBar: AppBar(
-                  title: const Text('Books Catalog'),
+                  automaticallyImplyLeading: false,
+                  title: const Text('Book Buffet'),
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(50),
                     child: TabBar(isScrollable: true, tabs: [
@@ -87,6 +111,7 @@ class _CatalogState extends State<Catalog> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           List<Book> books = snapshot.data!;
+                          saveBooks(books);
                           return GridView.builder(
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(

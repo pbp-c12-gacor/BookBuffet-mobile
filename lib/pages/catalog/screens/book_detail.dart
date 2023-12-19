@@ -1,10 +1,10 @@
+import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:bookbuffet/pages/catalog/models/rating.dart';
 import 'package:bookbuffet/pages/catalog/widgets/books_by_author.dart';
@@ -21,6 +21,8 @@ class BookDetail extends StatefulWidget {
 }
 
 class _BookDetailState extends State<BookDetail> {
+  //
+  bool? _isBookInMyBooks;
   // Add a list of book ratings
   late Future<List<Rating>> _ratings;
   // Add a list of book by the same authors
@@ -44,6 +46,15 @@ class _BookDetailState extends State<BookDetail> {
     for (var author in widget.book.authors) {
       _booksByAuthors.add(ApiService.getBooksByAuthor(author.id));
     }
+    CookieRequest cookieRequest =
+        Provider.of<CookieRequest>(context, listen: false);
+    bool isLoggedIn = UserApiService.isLoggedin(cookieRequest);
+    if (isLoggedIn) {
+      UserApiService.isBookInMyBooks(cookieRequest, widget.book.id)
+          .then((value) => setState(() {
+                _isBookInMyBooks = value;
+              }));
+    }
   }
 
   @override
@@ -58,30 +69,23 @@ class _BookDetailState extends State<BookDetail> {
           // Add a back button to the app bar
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, _isBookInMyBooks);
             },
             icon: const Icon(Icons.arrow_back),
           ),
           title: Text(widget.book.title),
-          actions: [
-            // Add an add to my books button to the app bar (Icons.bookmark_add)
-            // if the user is logged in.
-            // if the book is already in my books, show a remove button (Icons.bookmark_remove)
-            // instead.
-            if (isLoggedIn)
-              FutureBuilder<bool>(
-                future: UserApiService.isBookInMyBooks(
-                    cookieRequest, widget.book.id),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    bool isBookInMyBooks = snapshot.data!;
-                    return IconButton(
+          actions: isLoggedIn
+              ? [
+                  IconButton(
                       onPressed: () async {
-                        if (isBookInMyBooks) {
+                        if (_isBookInMyBooks!) {
                           bool isRemoved =
                               await UserApiService.removeFromMyBooks(
                                   cookieRequest, widget.book.id);
                           if (isRemoved) {
+                            setState(() {
+                              _isBookInMyBooks = false;
+                            });
                             scaffoldMessenger.showSnackBar(
                               const SnackBar(
                                 content: Text('Book removed from My Books'),
@@ -90,8 +94,7 @@ class _BookDetailState extends State<BookDetail> {
                           } else {
                             scaffoldMessenger.showSnackBar(
                               const SnackBar(
-                                content:
-                                    Text('Failed to remove book from My Books'),
+                                content: Text('Something went wrong!'),
                               ),
                             );
                           }
@@ -99,6 +102,9 @@ class _BookDetailState extends State<BookDetail> {
                           bool isAdded = await UserApiService.addToMyBooks(
                               cookieRequest, widget.book.id);
                           if (isAdded) {
+                            setState(() {
+                              _isBookInMyBooks = true;
+                            });
                             scaffoldMessenger.showSnackBar(
                               const SnackBar(
                                 content: Text('Book added to My Books'),
@@ -107,50 +113,20 @@ class _BookDetailState extends State<BookDetail> {
                           } else {
                             scaffoldMessenger.showSnackBar(
                               const SnackBar(
-                                content: Text('Failed to add book to My Books'),
+                                content: Text('Something went wrong!'),
                               ),
                             );
                           }
                         }
                       },
-                      icon: isBookInMyBooks
-                          ? const Icon(
-                              Icons.bookmark,
-                              color: Colors.orange,
-                            )
-                          : const Icon(
-                              Icons.bookmark_outline,
-                              color: Colors.orange,
-                            ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return const Center(
-                      child: Text('Something went wrong!'),
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              )
-            else ...[
-              // Add a login button to the app bar (Icons.login)
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.login,
-                  color: Colors.orange,
-                ),
-              ),
-            ],
-          ],
+                      icon: Icon(
+                        _isBookInMyBooks!
+                            ? Icons.bookmark
+                            : Icons.bookmark_border,
+                        color: secondaryColor,
+                      )),
+                ]
+              : [],
         ),
         body: ListView(
           children: [

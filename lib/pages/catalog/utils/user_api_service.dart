@@ -12,29 +12,23 @@ class UserApiService {
   static Future<bool> addToMyBooks(
       CookieRequest cookieRequest, int bookId) async {
     final request =
-        http.Request('POST', Uri.parse('$baseUrl/addtomybooks/$bookId'));
+        http.MultipartRequest('POST', Uri.parse('$baseUrl/addtomybooks'));
     request.headers.addAll(cookieRequest.headers);
+    request.fields['book_id'] = bookId.toString();
 
-    final response = await request.send();
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
+    final response = await http.Response.fromStream(await request.send());
+    return jsonDecode(response.body)['status'];
   }
 
   static Future<bool> removeFromMyBooks(
       CookieRequest cookieRequest, int bookId) async {
     final request =
-        http.Request('POST', Uri.parse('$baseUrl/removemybooks/$bookId'));
+        http.MultipartRequest('POST', Uri.parse('$baseUrl/removemybooks'));
     request.headers.addAll(cookieRequest.headers);
+    request.fields['book_id'] = bookId.toString();
 
-    final response = await request.send();
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
+    final response = await http.Response.fromStream(await request.send());
+    return jsonDecode(response.body)['status'];
   }
 
   static Future<bool> isBookInMyBooks(
