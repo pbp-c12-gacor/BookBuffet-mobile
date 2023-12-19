@@ -3,6 +3,7 @@ import 'package:bookbuffet/pages/home/screens/register.dart';
 import 'package:bookbuffet/pages/home/screens/home.dart';
 import 'package:bookbuffet/pages/base.dart';
 import 'package:bookbuffet/pages/home/screens/login.dart';
+import 'package:bookbuffet/pages/home/screens/welcome_screen.dart';
 import 'package:bookbuffet/pages/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,8 @@ import 'package:bookbuffet/pages/MyBooks/screens/mybooks.dart';
 const primaryColor = Color(0xfff3f2ec);
 const secondaryColor = Color(0xffc4a992);
 
-void main() {
+void main() async {
+  Get.put(BottomBarController());
   runApp(const MyApp());
 }
 
@@ -22,7 +24,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(BottomBarController());
     return Provider(
         create: (_) {
           CookieRequest request = CookieRequest();
@@ -38,9 +39,8 @@ class MyApp extends StatelessWidget {
 
           // home: LoginPage(),
           // home: RegisterPage(),
-          home: BasePage(),
+          home: WelcomeScreen(),
           // home: ProfilePage(),
-
         ));
   }
 }
