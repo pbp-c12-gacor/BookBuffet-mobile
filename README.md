@@ -88,7 +88,7 @@ Dataset yang digunakan pada aplikasi BookBuffet ini diambil dari [Google Books A
 |         |   - Menambah forum diskusi pada laman _community_.                                                     |
 |         |   - Menambahkan suatu buku ke katalog aplikasi.                                                        |
 | Admin   |   Admin dapat mengakses semua fitur `User` dan:                                                        |
-|         |   - Menghapus suatu buku dari katalog berdasarkan laporan yang diberi `User`.                          |
+|         |   - Menghapus suatu laporan buku dari katalog berdasarkan laporan yang diberi `User`.                  |
 |         |   - Menambahkan suatu buku ke katalog aplikasi.                                                        |
 
 ## 🔗 Referensi 🔗
