@@ -7,7 +7,8 @@
 <p align="center">
     <img alt="License" src="https://img.shields.io/github/license/pbp-c12-gacor/BookBuffet">
     <img alt="Last commit" src="https://img.shields.io/github/last-commit/pbp-c12-gacor/BookBuffet">
-    https://build.appcenter.ms/v0.1/apps/405fd5cd-3914-4304-95c0-df94c8763aca/branches/main/badge
+    <img alt="Build" src="https://build.appcenter.ms/v0.1/apps/405fd5cd-3914-4304-95c0-df94c8763aca/branches/main/badge">
+  
 </p>
 
 # 📖 BookBuffet 📖
