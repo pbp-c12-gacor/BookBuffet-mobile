@@ -88,67 +88,70 @@ class _HomePageState extends State<MyHomePage> {
     }
 
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/bg.png"),
-            fit: BoxFit.fill,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/bg.png"),
+          fit: BoxFit.fill,
         ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${greeting}',
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-                    ),
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: secondaryColor,
-                      child: Text(
-                        initial,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Container(
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${greeting}',
                         style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
+                            fontSize: 22, fontWeight: FontWeight.w600),
+                      ),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: secondaryColor,
+                        child: Text(
+                          initial,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                ourBooks(),
-                SizedBox(
-                  height: 30,
-                ),
-                getSectionQuoate(),
-                SizedBox(
-                  height: 15,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                readerToday(),
-                SizedBox(
-                  height: 30,
-                ),
-                // specialForYou(),
-                // SizedBox(
-                //   height: 30,
-                // )
-              ],
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  ourBooks(),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  getSectionQuoate(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  readerToday(),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  // specialForYou(),
+                  // SizedBox(
+                  //   height: 30,
+                  // )
+                ],
+              ),
             ),
           ),
         ),
@@ -352,7 +355,7 @@ class _HomePageState extends State<MyHomePage> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => BookDetail(book: book),
