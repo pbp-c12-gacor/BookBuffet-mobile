@@ -12,8 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:bookbuffet/pages/MyBooks/utils/review_card.dart';
 import 'package:bookbuffet/pages/MyBooks/models/bookReview.dart';
 
-import 'package:bookbuffet/pages/MyBooks/models/mybook.dart';
-import 'package:bookbuffet/pages/MyBooks/models/review.dart';
+import 'package:bookbuffet/pages/MyBooks/models/Mybook.dart';
+import 'package:bookbuffet/pages/MyBooks/models/Review.dart';
 
 class ReviewPage extends StatefulWidget {
   final BookReview book;
