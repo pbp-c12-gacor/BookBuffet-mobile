@@ -138,7 +138,6 @@ class _LoginPageState extends State<LoginPage> {
                     'username': username,
                     'password': password,
                   });
-
                   if (request.loggedIn) {
                     String message = response['message'];
                     String uname = response['username'];

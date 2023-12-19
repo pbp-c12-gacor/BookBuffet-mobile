@@ -1,27 +1,27 @@
 // To parse this JSON data, do
 //
-//     final myBook = myBookFromJson(jsonString);
+//     final bookReview = bookReviewFromJson(jsonString);
 
 import 'dart:convert';
 
-List<MyBook> myBookFromJson(String str) =>
-    List<MyBook>.from(json.decode(str).map((x) => MyBook.fromJson(x)));
+List<BookReview> bookReviewFromJson(String str) =>
+    List<BookReview>.from(json.decode(str).map((x) => BookReview.fromJson(x)));
 
-String myBookToJson(List<MyBook> data) =>
+String bookReviewToJson(List<BookReview> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class MyBook {
+class BookReview {
   String model;
   int pk;
   Fields fields;
 
-  MyBook({
+  BookReview({
     required this.model,
     required this.pk,
     required this.fields,
   });
 
-  factory MyBook.fromJson(Map<String, dynamic> json) => MyBook(
+  factory BookReview.fromJson(Map<String, dynamic> json) => BookReview(
         model: json["model"],
         pk: json["pk"],
         fields: Fields.fromJson(json["fields"]),

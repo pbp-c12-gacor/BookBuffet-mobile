@@ -40,6 +40,7 @@ class ApiService {
 
   static Future<Book> getBook(int id) async {
     final response = await http.get(Uri.parse('$baseApiUrl/books/$id'));
+
     if (response.statusCode == 200) {
       Book book = Book.fromJson(json.decode(response.body));
       return book;

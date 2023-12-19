@@ -36,11 +36,10 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
 
-          // home: LoginPage(),
+          home: LoginPage(),
           // home: RegisterPage(),
-          home: BasePage(),
+          // home: BasePage(),
           // home: ProfilePage(),
-
         ));
   }
 }
