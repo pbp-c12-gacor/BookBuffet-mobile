@@ -5,15 +5,9 @@ import 'package:get/get.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:bookbuffet/pages/base.dart';
 import 'package:provider/provider.dart';
-import 'package:bookbuffet/pages/home/screens/home.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_field/image_field.dart';
-import 'package:image_field/linear_progress_Indicator.dart';
-import 'package:http/http.dart' as http;
-import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 class PublishPage extends StatefulWidget {
   const PublishPage({super.key});
