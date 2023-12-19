@@ -355,7 +355,7 @@ class _HomePageState extends State<MyHomePage> {
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => BookDetail(book: book),
