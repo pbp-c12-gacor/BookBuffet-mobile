@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:bookbuffet/pages/base.dart';
+import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
 import 'package:bookbuffet/pages/home/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -38,8 +40,8 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   Future<Map<String, dynamic>> getUserById(String userId) async {
-    final response = await http
-        .get(Uri.parse('$baseApiUrl/report/get-user/$userId/'));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/report/get-user/$userId/'));
     if (response.statusCode == 200) {
       var user = jsonDecode(utf8.decode(response.bodyBytes))[0];
       return {'id': user['pk'], 'username': user['fields']['username']};
@@ -49,8 +51,8 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   Future<List<String>> searchBooks(String input) async {
-    final response = await http.get(
-        Uri.parse('$baseApiUrl/api/search?search=title:$input'));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/api/search/?search=title__icontains=$input'));
     var data = jsonDecode(utf8.decode(response.bodyBytes));
     List<String> bookTitles = [];
     for (var a in data) {
@@ -61,6 +63,17 @@ class _ReportPageState extends State<ReportPage> {
       }
     }
     return bookTitles;
+  }
+
+  static Future<List<Book>> searchBooksByTitle(String query) async {
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/api/search?search=title:$query'));
+    if (response.statusCode == 200) {
+      List<Book> books = bookFromJson(response.body);
+      return books;
+    } else {
+      throw Exception('Failed to load books');
+    }
   }
 
   @override
@@ -149,8 +162,7 @@ class _ReportPageState extends State<ReportPage> {
                                 if (response['status'] == 'success') {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(const SnackBar(
-                                    content:
-                                        Text("New Report has been saved!"),
+                                    content: Text("New Report has been saved!"),
                                   ));
                                   Navigator.pushReplacement(
                                     context,
