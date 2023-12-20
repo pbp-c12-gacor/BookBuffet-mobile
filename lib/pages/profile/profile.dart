@@ -3,8 +3,9 @@ import 'package:bookbuffet/pages/forum/screens/my_post.dart';
 import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/pages/home/screens/register.dart';
 import 'package:bookbuffet/pages/profile/models/profile_menu.dart';
-import 'package:bookbuffet/pages/publish/screens/publish_options.dart';
+import 'package:bookbuffet/pages/report/main.dart';
 import 'package:bookbuffet/pages/report/screens/show_reports.dart';
+import 'package:bookbuffet/pages/publish/screens/publish_options.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -132,7 +133,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       ProfileMenuWidget(
                           title: "Report Book",
                           icon: Icons.report,
-                          onPress: () {}),
+                          onPress: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ReportPage()),
+                            );
+                          }),
                       const SizedBox(height: 10),
                       ProfileMenuWidget(
                           title: "My Books", icon: Icons.book, onPress: () {}),
