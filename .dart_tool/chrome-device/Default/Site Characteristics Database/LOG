@@ -1,6 +1,9 @@
-2023/12/20-17:42:35.640 2ef0 Reusing MANIFEST C:\Users\ricar\AppData\Local\Temp\flutter_tools.2e0579f\flutter_tools_chrome_device.dfa8a623\Default\Site Characteristics Database/MANIFEST-000001
-2023/12/20-17:42:35.641 2ef0 Recovering log #6
-2023/12/20-17:42:35.641 2ef0 Reusing old log C:\Users\ricar\AppData\Local\Temp\flutter_tools.2e0579f\flutter_tools_chrome_device.dfa8a623\Default\Site Characteristics Database/000006.log 
-2023/12/20-17:42:35.642 2ef0 Delete type=0 #3
-2023/12/20-17:42:35.642 2ef0 Delete type=2 #4
-2023/12/20-17:42:35.642 2ef0 Delete type=2 #6
+2023/12/20-18:30:34.202 6c5c Reusing MANIFEST C:\Users\ricar\AppData\Local\Temp\flutter_tools.f42a1082\flutter_tools_chrome_device.f89fdfd9\Default\Site Characteristics Database/MANIFEST-000001
+2023/12/20-18:30:34.203 6c5c Recovering log #3
+2023/12/20-18:30:34.203 6c5c Level-0 table #3: started
+2023/12/20-18:30:34.206 6c5c Level-0 table #3: 191 bytes OK
+2023/12/20-18:30:34.208 6c5c Recovering log #6
+2023/12/20-18:30:34.209 6c5c Reusing old log C:\Users\ricar\AppData\Local\Temp\flutter_tools.f42a1082\flutter_tools_chrome_device.f89fdfd9\Default\Site Characteristics Database/000006.log 
+2023/12/20-18:30:34.217 6c5c Delete type=0 #3
+2023/12/20-18:30:34.217 6c5c Delete type=2 #4
+2023/12/20-18:30:34.217 6c5c Delete type=2 #6

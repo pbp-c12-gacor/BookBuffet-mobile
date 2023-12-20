@@ -59,7 +59,7 @@ class _PublishOptionPageState extends State<PublishOptionPage> {
               bool isStaff = snapshot.data ?? false;
 
               return Padding(
-                padding: const EdgeInsets.only(top: 20.0),
+                padding: const EdgeInsets.only(top: 20.0, right: 16, left: 16),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,

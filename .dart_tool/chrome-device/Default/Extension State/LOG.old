@@ -1,3 +1,9 @@
-2023/12/20-11:27:51.837 49f0 Reusing MANIFEST C:\Users\ricar\AppData\Local\Temp\flutter_tools.368fc104\flutter_tools_chrome_device.b392d6b9\Default\Extension State/MANIFEST-000001
-2023/12/20-11:27:51.838 49f0 Recovering log #3
-2023/12/20-11:27:51.838 49f0 Reusing old log C:\Users\ricar\AppData\Local\Temp\flutter_tools.368fc104\flutter_tools_chrome_device.b392d6b9\Default\Extension State/000003.log 
+<<<<<<< HEAD
+2023/12/20-17:42:35.787 1f14 Reusing MANIFEST C:\Users\ricar\AppData\Local\Temp\flutter_tools.2e0579f\flutter_tools_chrome_device.dfa8a623\Default\Extension State/MANIFEST-000001
+2023/12/20-17:42:35.788 1f14 Recovering log #3
+2023/12/20-17:42:35.789 1f14 Reusing old log C:\Users\ricar\AppData\Local\Temp\flutter_tools.2e0579f\flutter_tools_chrome_device.dfa8a623\Default\Extension State/000003.log 
+=======
+2023/12/20-16:30:41.477 b203 Reusing MANIFEST /private/var/folders/3b/rm1pbphs1xg6l_59_v7c4d640000gn/T/flutter_tools.pOFvCc/flutter_tools_chrome_device.AXQp26/Default/Extension State/MANIFEST-000001
+2023/12/20-16:30:41.478 b203 Recovering log #3
+2023/12/20-16:30:41.478 b203 Reusing old log /private/var/folders/3b/rm1pbphs1xg6l_59_v7c4d640000gn/T/flutter_tools.pOFvCc/flutter_tools_chrome_device.AXQp26/Default/Extension State/000003.log 
+>>>>>>> 8333bc635dc4a4896b4bd9d6ed1e1f1ef12d499d
