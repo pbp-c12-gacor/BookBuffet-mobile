@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
-import 'package:bookbuffet/pages/MyBooks/models/mybook.dart';
+import 'package:bookbuffet/pages/MyBooks/models/Mybook.dart';
 
 class MyBooksPage extends StatefulWidget {
   const MyBooksPage({Key? key}) : super(key: key);

@@ -51,62 +51,72 @@ class DetailReportPage extends StatelessWidget {
             // Check if user is staff
             return Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    '${report.fields.bookTitle}',
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Text("Comment    : ${report.fields.comment}"),
-                  ElevatedButton(
-                    child: const Text('Delete Report'),
-                    onPressed: () async {
-                      int id = report.pk;
-                      final response = await request.postJson(
-                        '$baseApiUrl/report/delete-report-flutter/$id/',
-                        jsonEncode({
-                          "id": report.pk,
-                        }),
-                      );
-                      if (response['status'] == 'success') {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Report has been deleted!"),
-                        ));
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ShowReportsPage()),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${report.fields.bookTitle}',
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    Text("Comment    : ${report.fields.comment}"),
+                    ElevatedButton(
+                      child: const Text('Delete Report'),
+                      onPressed: () async {
+                        int id = report.pk;
+                        final http.Response response = await http.post(
+                          Uri.parse(
+                              'https://bookbuffet.onrender.com/report/delete-report-flutter/$id/'),
+                          headers: <String, String>{
+                            'Content-Type': 'application/json; charset=UTF-8',
+                          },
+                          body: jsonEncode({
+                            "id": report.pk,
+                          }),
                         );
-                      } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("There is an error, please try again."),
-                        ));
-                      }
-                    },
-                  ),
-                ],
+                        final Map<String, dynamic> responseBody =
+                            jsonDecode(response.body);
+                        if (responseBody['status'] == 'success') {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Report has been deleted!"),
+                          ));
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ShowReportsPage()),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("There is an error, please try again."),
+                          ));
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           } else {
             return Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    '${report.fields.bookTitle}',
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                        selectionColor: Color(0xFFC5A992),
-                  ),
-                  const SizedBox(height: 10),
-                  Text("Comment    : ${report.fields.comment}"),
-                ],
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${report.fields.bookTitle}',
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                          selectionColor: Color(0xFFC5A992),
+                    ),
+                    const SizedBox(height: 10),
+                    Text("Comment    : ${report.fields.comment}"),
+                  ],
+                ),
               ),
             );
           }

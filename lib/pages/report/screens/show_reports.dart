@@ -85,7 +85,7 @@ class _ShowReportsPageState extends State<ShowReportsPage> {
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) => InkWell(
                               onTap: () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DetailReportPage(
