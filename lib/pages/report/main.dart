@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:bookbuffet/pages/base.dart';
+import 'package:bookbuffet/pages/catalog/models/book.dart';
+import 'package:bookbuffet/pages/report/screens/show_reports.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
 import 'package:bookbuffet/pages/home/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -24,10 +27,11 @@ class _ReportPageState extends State<ReportPage> {
   String input = "";
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();
+  static String baseApiUrl = 'https://bookbuffet.onrender.com';
 
   Future<Map<String, dynamic>> getBookById(String bookId) async {
     final response =
-        await http.get(Uri.parse('http://127.0.0.1:8000/api/books/$bookId/'));
+        await http.get(Uri.parse('$baseApiUrl/api/books/$bookId/'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -37,8 +41,8 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   Future<Map<String, dynamic>> getUserById(String userId) async {
-    final response = await http
-        .get(Uri.parse('http://127.0.0.1:8000/report/get-user/$userId/'));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/report/get-user/$userId/'));
     if (response.statusCode == 200) {
       var user = jsonDecode(utf8.decode(response.bodyBytes))[0];
       return {'id': user['pk'], 'username': user['fields']['username']};
@@ -48,8 +52,8 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   Future<List<String>> searchBooks(String input) async {
-    final response = await http.get(
-        Uri.parse('http://127.0.0.1:8000/api/search/?search=title:${input}'));
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/api/search/?search=title:$input'));
     var data = jsonDecode(utf8.decode(response.bodyBytes));
     List<String> bookTitles = [];
     for (var a in data) {
@@ -60,6 +64,17 @@ class _ReportPageState extends State<ReportPage> {
       }
     }
     return bookTitles;
+  }
+
+  static Future<List<Book>> searchBooksByTitle(String query) async {
+    final response =
+        await http.get(Uri.parse('$baseApiUrl/api/search?search=title:$query'));
+    if (response.statusCode == 200) {
+      List<Book> books = bookFromJson(response.body);
+      return books;
+    } else {
+      throw Exception('Failed to load books');
+    }
   }
 
   @override
@@ -140,7 +155,7 @@ class _ReportPageState extends State<ReportPage> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 final response = await request.postJson(
-                                    "http://127.0.0.1:8000/report/create-report-flutter/",
+                                    "https://bookbuffet.onrender.com/report/create-report-flutter/",
                                     jsonEncode(<String, String>{
                                       'book_title': _controller2.text,
                                       'comment': _comment,
@@ -148,13 +163,12 @@ class _ReportPageState extends State<ReportPage> {
                                 if (response['status'] == 'success') {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(const SnackBar(
-                                    content:
-                                        Text("New Report has been saved!"),
+                                    content: Text("New Report has been saved!"),
                                   ));
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => BasePage()),
+                                        builder: (context) => ShowReportsPage()),
                                   );
                                 } else {
                                   ScaffoldMessenger.of(context)
