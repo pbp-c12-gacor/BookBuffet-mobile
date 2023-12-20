@@ -269,8 +269,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       );
                       return;
                     }
-                    final response = await request
-                        .post("http://127.0.0.1:8000/auth/register/", {
+                    final response =
+                        await request.post("$baseApiUrl/auth/register/", {
                       'username': username,
                       'password': password,
                       'role': role,

@@ -6,9 +6,8 @@ void showCustomSnackBar(BuildContext context, String message,
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Row(
       children: [
-        Icon(Icons.check_circle,
-            color: textColor ?? primaryColor), // Ikon sukses
-        SizedBox(width: 16), // Jarak antara ikon dan teks
+        Icon(Icons.check_circle, color: textColor ?? primaryColor),
+        SizedBox(width: 16),
         Expanded(
           child: Text(
             message,
@@ -17,12 +16,11 @@ void showCustomSnackBar(BuildContext context, String message,
         ),
       ],
     ),
-    backgroundColor:
-        backgroundColor ?? secondaryColor, // Warna latar belakang default
+    backgroundColor: backgroundColor ?? secondaryColor,
     dismissDirection: DismissDirection.horizontal,
     behavior: SnackBarBehavior.floating,
     margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height, left: 10, right: 10),
-    duration: Duration(seconds: 4), // Durasi tampilan SnackBar
+        bottom: MediaQuery.of(context).size.height - 200, left: 10, right: 10),
+    duration: Duration(seconds: 3),
   ));
 }

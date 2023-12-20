@@ -61,9 +61,11 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 10,
               ),
-              Text(
-                "Welcome back, you've been missed",
-                style: TextStyle(fontSize: 24),
+              Center(
+                child: Text(
+                  "Welcome back, you've been missed",
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -135,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                   String username = _usernameController.text;
                   String password = _passwordController.text;
                   final response =
-                      await request.login("http://127.0.0.1:8000/auth/login/", {
+                      await request.login("$baseApiUrl/auth/login/", {
                     'username': username,
                     'password': password,
                   });
