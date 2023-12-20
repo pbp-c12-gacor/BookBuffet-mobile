@@ -21,21 +21,19 @@ class BookDetail extends StatefulWidget {
 }
 
 class _BookDetailState extends State<BookDetail> {
-  //
+  // Add a variable to store whether the book is in My Books
   bool? _isBookInMyBooks;
   // Add a list of book ratings
   late Future<List<Rating>> _ratings;
   // Add a list of book by the same authors
   late List<Future<List<Book>>> _booksByAuthors = [];
 
-  double _getMeanRating(Future<List<Rating>> ratings) {
+  double _getMeanRating(List<Rating> ratings) {
     double meanRating = 0;
-    ratings.then((value) {
-      for (var rating in value) {
-        meanRating += rating.rating;
-      }
-      meanRating = meanRating / value.length;
-    });
+    for (var rating in ratings) {
+      meanRating += rating.rating;
+    }
+    meanRating = meanRating / ratings.length;
     return meanRating;
   }
 
@@ -212,11 +210,32 @@ class _BookDetailState extends State<BookDetail> {
                                     ),
                                     Row(
                                       children: [
-                                        Text(
-                                          _getMeanRating(_ratings).toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        FutureBuilder<List<Rating>>(
+                                          future: _ratings,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              List<Rating> ratings =
+                                                  snapshot.data!;
+                                              return Text(
+                                                ratings.isEmpty
+                                                    ? '0'
+                                                    : _getMeanRating(ratings)
+                                                        .toStringAsFixed(1),
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              );
+                                            } else if (snapshot.hasError) {
+                                              return const Center(
+                                                child: Text(
+                                                    'Something went wrong!'),
+                                              );
+                                            }
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          },
                                         ),
                                         const Icon(
                                           Icons.star,
