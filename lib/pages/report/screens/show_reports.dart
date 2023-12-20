@@ -17,10 +17,11 @@ class ShowReportsPage extends StatefulWidget {
 }
 
 class _ShowReportsPageState extends State<ShowReportsPage> {
+  static String baseApiUrl = 'https://bookbuffet.onrender.com';
 
   Future<List<Report>> fetchReports() async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    var url = Uri.parse('http://127.0.0.1:8000/report/json/');
+    var url = Uri.parse('$baseApiUrl/report/json/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -35,14 +36,28 @@ class _ShowReportsPageState extends State<ShowReportsPage> {
     return list_reports;
   }
 
+  Future<bool> getUserIsStaff() async {
+    final request = context.watch<CookieRequest>();
+
+    var response = await request.get('$baseApiUrl/publish/is-staff/');
+
+    if (response != null) {
+      bool isStaff = response['is_staff'];
+
+      return isStaff;
+    } else {
+      throw Exception('Failed to load user is staff status');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           title: const Text('Book Buffet',
               style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Color(0xFF35155D))),
-          backgroundColor: const Color(0xFF4477CE)),
+                  fontWeight: FontWeight.bold, color: Color(0xFFF1F1F0))),
+          backgroundColor: const Color(0xFFC5A992)),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -58,7 +73,7 @@ class _ShowReportsPageState extends State<ShowReportsPage> {
                             Text(
                               "Tidak ada data Report.",
                               style: TextStyle(
-                                  color: Color(0xFF35155D), fontSize: 20),
+                                  color: Color(0xFFF1F1F0), fontSize: 20),
                             ),
                             SizedBox(height: 8),
                           ],
@@ -70,7 +85,7 @@ class _ShowReportsPageState extends State<ShowReportsPage> {
                             itemCount: snapshot.data!.length,
                             itemBuilder: (_, index) => InkWell(
                               onTap: () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DetailReportPage(
@@ -84,7 +99,7 @@ class _ShowReportsPageState extends State<ShowReportsPage> {
                                 padding: const EdgeInsets.all(20.0),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Color(0xFF8CABFF),
+                                    color: Color(0xFFC5A992),
                                     width: 1,
                                   ),
                                   borderRadius: BorderRadius.circular(12),

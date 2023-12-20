@@ -21,7 +21,7 @@ class ProfileMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: secondaryColor.withOpacity(0.3),
+          color: primaryColor.withOpacity(0.7),
           borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         onTap: onPress,
@@ -43,7 +43,7 @@ class ProfileMenuWidget extends StatelessWidget {
                 height: 30,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.white.withOpacity(0.5),
                 ),
                 child: const Icon(Icons.arrow_right,
                     size: 18.0, color: Colors.grey))
