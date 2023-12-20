@@ -1,4 +1,3 @@
-import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -9,19 +8,12 @@ import 'package:bookbuffet/pages/catalog/screens/book_detail.dart';
 import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
 import 'package:bookbuffet/pages/catalog/utils/user_api_service.dart';
 
-class BookCard extends StatefulWidget {
+class BookCard extends StatelessWidget {
   final Book book;
   const BookCard({Key? key, required this.book}) : super(key: key);
 
-  @override
-  _BookCardState createState() => _BookCardState();
-}
-
-class _BookCardState extends State<BookCard> {
-  bool? _isBookInMyBooks;
-
   Future<List<Rating>> getRatings() async {
-    return await ApiService.getRatingsByBook(widget.book.id);
+    return await ApiService.getRatingsByBook(book.id);
   }
 
   double _getMeanRating(List<Rating> ratings) {
@@ -34,20 +26,6 @@ class _BookCardState extends State<BookCard> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    CookieRequest cookieRequest =
-        Provider.of<CookieRequest>(context, listen: false);
-    bool isLoggedIn = UserApiService.isLoggedin(cookieRequest);
-    if (isLoggedIn) {
-      UserApiService.isBookInMyBooks(cookieRequest, widget.book.id)
-          .then((value) => setState(() {
-                _isBookInMyBooks = value;
-              }));
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Rating>>(
       future: getRatings(),
@@ -57,18 +35,13 @@ class _BookCardState extends State<BookCard> {
           double meanRating = _getMeanRating(ratings);
           return Card(
             child: InkWell(
-              onTap: () async {
-                final result = await Navigator.push(
+              onTap: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BookDetail(book: widget.book),
+                    builder: (context) => BookDetail(book: book),
                   ),
                 );
-                if (result != null) {
-                  setState(() {
-                    _isBookInMyBooks = result;
-                  });
-                }
               },
               onLongPress: () async {
                 CookieRequest cookieRequest =
@@ -76,15 +49,12 @@ class _BookCardState extends State<BookCard> {
                 final scaffoldMessenger = ScaffoldMessenger.of(context);
                 bool isLoggedIn = UserApiService.isLoggedin(cookieRequest);
                 if (isLoggedIn) {
-                  _isBookInMyBooks = await UserApiService.isBookInMyBooks(
-                      cookieRequest, widget.book.id);
-                  if (_isBookInMyBooks!) {
+                  bool isBookInMyBooks = await UserApiService.isBookInMyBooks(
+                      cookieRequest, book.id);
+                  if (isBookInMyBooks) {
                     bool isRemoved = await UserApiService.removeFromMyBooks(
-                        cookieRequest, widget.book.id);
+                        cookieRequest, book.id);
                     if (isRemoved) {
-                      setState(() {
-                        _isBookInMyBooks = false;
-                      });
                       scaffoldMessenger.showSnackBar(
                         const SnackBar(
                           content: Text('Book removed from My Books'),
@@ -99,11 +69,8 @@ class _BookCardState extends State<BookCard> {
                     }
                   } else {
                     bool isAdded = await UserApiService.addToMyBooks(
-                        cookieRequest, widget.book.id);
+                        cookieRequest, book.id);
                     if (isAdded) {
-                      setState(() {
-                        _isBookInMyBooks = true;
-                      });
                       scaffoldMessenger.showSnackBar(
                         const SnackBar(
                           content: Text('Book added to My Books'),
@@ -125,91 +92,58 @@ class _BookCardState extends State<BookCard> {
                   );
                 }
               },
-              child: Stack(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // Add a book cover image
-                      Expanded(
-                        child: CachedNetworkImage(
-                          imageUrl: widget.book.cover,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      ),
-                      // Add a book title
-                      Text(
-                        widget.book.title,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Raleway',
-                        ),
-                      ),
-                      // Add a book authors
-                      // If there are more than one author,
-                      // just show the first one
-                      // followed by 'et al.'
-                      Text(
-                        widget.book.authors.length > 1
-                            ? '${widget.book.authors[0].name} et al.'
-                            : widget.book.authors[0].name,
-                        textAlign: TextAlign.center,
-                      ),
-                      // Add a mean rating
-                      // If there are no ratings, show '0 ⭐ (0)'
-                      // If there are ratings, show the mean rating
-                      // followed by the number of ratings in brackets
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            ratings.isEmpty
-                                ? '0'
-                                : meanRating.toStringAsFixed(1),
-                          ),
-                          const Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                          ),
-                          Text(
-                            ' (${ratings.length})',
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  // Add a bookmarket icon to show
-                  // if the book is in My Books
-                  // or not
-                  // And position it to the top right corner
-                  // of the card
-                  // Only show the icon
-                  // Don't make it clickable
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Consumer<CookieRequest>(
-                      builder: (context, cookieRequest, child) {
-                        bool isLoggedIn =
-                            UserApiService.isLoggedin(cookieRequest);
-                        if (isLoggedIn) {
-                          return Icon(
-                            _isBookInMyBooks!
-                                ? Icons.bookmark
-                                : Icons.bookmark_border,
-                            color: secondaryColor,
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      },
+                  // Add a book cover image
+                  Expanded(
+                    child: CachedNetworkImage(
+                      imageUrl: book.cover,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
+                  // Add a book title
+                  Text(
+                    book.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Raleway',
+                    ),
+                  ),
+                  // Add a book authors
+                  // If there are more than one author,
+                  // just show the first one
+                  // followed by 'et al.'
+                  Text(
+                    book.authors.length > 1
+                        ? '${book.authors[0].name} et al.'
+                        : book.authors[0].name,
+                    textAlign: TextAlign.center,
+                  ),
+                  // Add a mean rating
+                  // If there are no ratings, show '0 ⭐ (0)'
+                  // If there are ratings, show the mean rating
+                  // followed by the number of ratings in brackets
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        ratings.isEmpty ? '0' : meanRating.toStringAsFixed(1),
+                      ),
+                      const Icon(
+                        Icons.star,
+                        color: Colors.yellow,
+                      ),
+                      Text(
+                        ' (${ratings.length})',
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
