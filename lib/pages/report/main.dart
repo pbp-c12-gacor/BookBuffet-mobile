@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bookbuffet/pages/base.dart';
 import 'package:bookbuffet/pages/catalog/models/book.dart';
+import 'package:bookbuffet/pages/report/screens/show_reports.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:bookbuffet/main.dart';
@@ -52,7 +53,7 @@ class _ReportPageState extends State<ReportPage> {
 
   Future<List<String>> searchBooks(String input) async {
     final response =
-        await http.get(Uri.parse('$baseApiUrl/api/search/?search=title__icontains=$input'));
+        await http.get(Uri.parse('$baseApiUrl/api/search/?search=title:$input'));
     var data = jsonDecode(utf8.decode(response.bodyBytes));
     List<String> bookTitles = [];
     for (var a in data) {
@@ -167,7 +168,7 @@ class _ReportPageState extends State<ReportPage> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => BasePage()),
+                                        builder: (context) => ShowReportsPage()),
                                   );
                                 } else {
                                   ScaffoldMessenger.of(context)
