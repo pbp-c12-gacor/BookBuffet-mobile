@@ -72,7 +72,7 @@ class _BookDetailState extends State<BookDetail> {
             icon: const Icon(Icons.arrow_back),
           ),
           title: Text(widget.book.title),
-          actions: isLoggedIn
+          actions: isLoggedIn && _isBookInMyBooks != null
               ? [
                   IconButton(
                       onPressed: () async {
