@@ -1,10 +1,10 @@
+import 'package:bookbuffet/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:bookbuffet/pages/catalog/models/rating.dart';
 import 'package:bookbuffet/pages/catalog/widgets/books_by_author.dart';
@@ -21,19 +21,19 @@ class BookDetail extends StatefulWidget {
 }
 
 class _BookDetailState extends State<BookDetail> {
+  // Add a variable to store whether the book is in My Books
+  bool? _isBookInMyBooks;
   // Add a list of book ratings
   late Future<List<Rating>> _ratings;
   // Add a list of book by the same authors
   late List<Future<List<Book>>> _booksByAuthors = [];
 
-  double _getMeanRating(Future<List<Rating>> ratings) {
+  double _getMeanRating(List<Rating> ratings) {
     double meanRating = 0;
-    ratings.then((value) {
-      for (var rating in value) {
-        meanRating += rating.rating;
-      }
-      meanRating = meanRating / value.length;
-    });
+    for (var rating in ratings) {
+      meanRating += rating.rating;
+    }
+    meanRating = meanRating / ratings.length;
     return meanRating;
   }
 
@@ -43,6 +43,15 @@ class _BookDetailState extends State<BookDetail> {
     _ratings = ApiService.getRatingsByBook(widget.book.id);
     for (var author in widget.book.authors) {
       _booksByAuthors.add(ApiService.getBooksByAuthor(author.id));
+    }
+    CookieRequest cookieRequest =
+        Provider.of<CookieRequest>(context, listen: false);
+    bool isLoggedIn = UserApiService.isLoggedin(cookieRequest);
+    if (isLoggedIn) {
+      UserApiService.isBookInMyBooks(cookieRequest, widget.book.id)
+          .then((value) => setState(() {
+                _isBookInMyBooks = value;
+              }));
     }
   }
 
@@ -58,30 +67,23 @@ class _BookDetailState extends State<BookDetail> {
           // Add a back button to the app bar
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, _isBookInMyBooks);
             },
             icon: const Icon(Icons.arrow_back),
           ),
           title: Text(widget.book.title),
-          actions: [
-            // Add an add to my books button to the app bar (Icons.bookmark_add)
-            // if the user is logged in.
-            // if the book is already in my books, show a remove button (Icons.bookmark_remove)
-            // instead.
-            if (isLoggedIn)
-              FutureBuilder<bool>(
-                future: UserApiService.isBookInMyBooks(
-                    cookieRequest, widget.book.id),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    bool isBookInMyBooks = snapshot.data!;
-                    return IconButton(
+          actions: isLoggedIn
+              ? [
+                  IconButton(
                       onPressed: () async {
-                        if (isBookInMyBooks) {
+                        if (_isBookInMyBooks!) {
                           bool isRemoved =
                               await UserApiService.removeFromMyBooks(
                                   cookieRequest, widget.book.id);
                           if (isRemoved) {
+                            setState(() {
+                              _isBookInMyBooks = false;
+                            });
                             scaffoldMessenger.showSnackBar(
                               const SnackBar(
                                 content: Text('Book removed from My Books'),
@@ -90,8 +92,7 @@ class _BookDetailState extends State<BookDetail> {
                           } else {
                             scaffoldMessenger.showSnackBar(
                               const SnackBar(
-                                content:
-                                    Text('Failed to remove book from My Books'),
+                                content: Text('Something went wrong!'),
                               ),
                             );
                           }
@@ -99,6 +100,9 @@ class _BookDetailState extends State<BookDetail> {
                           bool isAdded = await UserApiService.addToMyBooks(
                               cookieRequest, widget.book.id);
                           if (isAdded) {
+                            setState(() {
+                              _isBookInMyBooks = true;
+                            });
                             scaffoldMessenger.showSnackBar(
                               const SnackBar(
                                 content: Text('Book added to My Books'),
@@ -107,49 +111,20 @@ class _BookDetailState extends State<BookDetail> {
                           } else {
                             scaffoldMessenger.showSnackBar(
                               const SnackBar(
-                                content: Text('Failed to add book to My Books'),
+                                content: Text('Something went wrong!'),
                               ),
                             );
                           }
                         }
                       },
-                      icon: isBookInMyBooks
-                          ? const Icon(
-                              Icons.bookmark_remove,
-                              color: Colors.orange,
-                            )
-                          : const Icon(
-                              Icons.bookmark_add,
-                              color: Colors.grey,
-                            ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return const Center(
-                      child: Text('Something went wrong!'),
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              )
-            else ...[
-              // Add a login button to the app bar (Icons.login)
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.login,
-                ),
-              ),
-            ],
-          ],
+                      icon: Icon(
+                        _isBookInMyBooks!
+                            ? Icons.bookmark
+                            : Icons.bookmark_border,
+                        color: secondaryColor,
+                      )),
+                ]
+              : [],
         ),
         body: ListView(
           children: [
@@ -180,27 +155,33 @@ class _BookDetailState extends State<BookDetail> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      widget.book.title,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                    RichText(
+                                      text: TextSpan(
+                                        text: widget.book.title,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    ExpandableText(
-                                      widget.book.subtitle,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                      expandText: 'more',
-                                      collapseText: 'less',
-                                      maxLines: 2,
-                                      linkColor: Colors.blue,
-                                    ),
+                                    widget.book.subtitle == ""
+                                        ? const SizedBox.shrink()
+                                        : const SizedBox(
+                                            height: 8,
+                                          ),
+                                    widget.book.subtitle == ""
+                                        ? const SizedBox.shrink()
+                                        : ExpandableText(
+                                            widget.book.subtitle ?? "",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                            expandText: 'more',
+                                            collapseText: 'less',
+                                            maxLines: 2,
+                                            linkColor: Colors.blue,
+                                          ),
                                     const SizedBox(
                                       height: 8,
                                     ),
@@ -229,11 +210,32 @@ class _BookDetailState extends State<BookDetail> {
                                     ),
                                     Row(
                                       children: [
-                                        Text(
-                                          _getMeanRating(_ratings).toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        FutureBuilder<List<Rating>>(
+                                          future: _ratings,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              List<Rating> ratings =
+                                                  snapshot.data!;
+                                              return Text(
+                                                ratings.isEmpty
+                                                    ? '0'
+                                                    : _getMeanRating(ratings)
+                                                        .toStringAsFixed(1),
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              );
+                                            } else if (snapshot.hasError) {
+                                              return const Center(
+                                                child: Text(
+                                                    'Something went wrong!'),
+                                              );
+                                            }
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          },
                                         ),
                                         const Icon(
                                           Icons.star,
@@ -270,17 +272,19 @@ class _BookDetailState extends State<BookDetail> {
                                     const SizedBox(
                                       height: 8,
                                     ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        fixedSize: const Size(200, 40),
-                                      ),
-                                      onPressed: () {
-                                        Uri link =
-                                            Uri.parse(widget.book.previewLink);
-                                        launchUrl(link);
-                                      },
-                                      child: const Text('Preview'),
-                                    ),
+                                    widget.book.previewLink != null
+                                        ? ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              fixedSize: const Size(200, 40),
+                                            ),
+                                            onPressed: () {
+                                              Uri link = Uri.parse(
+                                                  widget.book.previewLink!);
+                                              launchUrl(link);
+                                            },
+                                            child: const Text('Preview'),
+                                          )
+                                        : const SizedBox.shrink(),
                                   ])))),
                 ],
               ),
@@ -294,7 +298,7 @@ class _BookDetailState extends State<BookDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ExpandableText(
-                    widget.book.description,
+                    widget.book.description ?? "",
                     style: const TextStyle(
                       fontSize: 16,
                     ),
@@ -349,7 +353,7 @@ class _BookDetailState extends State<BookDetail> {
                       ),
                       children: [
                         TextSpan(
-                          text: widget.book.language.toString().split('.')[1],
+                          text: widget.book.language ?? 'Unknown',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -492,40 +496,3 @@ class _BookDetailState extends State<BookDetail> {
     );
   }
 }
-//         ),
-//                 const Align(
-//                   alignment: Alignment.centerLeft,
-//                   child: Text(
-//                     'Ratings',
-//                     style: TextStyle(
-//                       fontWeight: FontWeight.bold,
-//                       fontSize: 20,
-//                     ),
-//                   ),
-//                 ),
-//                 // Add a list of ratings
-//                 Ratings(ratings: _ratings),
-//                 // Add a header for books by the same authors
-//                 const Align(
-//                   alignment: Alignment.centerLeft,
-//                   child: Text(
-//                     'Books by the same authors',
-//                     style: TextStyle(
-//                       fontWeight: FontWeight.bold,
-//                       fontSize: 20,
-//                     ),
-//                   ),
-//                 ),
-//                 // Add a list of books by the same authors
-//                 BooksByAuthor(
-//                   booksByAuthors: _booksByAuthors,
-//                   authors: widget.book.authors,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
