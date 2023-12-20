@@ -197,7 +197,7 @@ class _BookCardState extends State<BookCard> {
                       builder: (context, cookieRequest, child) {
                         bool isLoggedIn =
                             UserApiService.isLoggedin(cookieRequest);
-                        if (isLoggedIn) {
+                        if (isLoggedIn && _isBookInMyBooks != null) {
                           return Icon(
                             _isBookInMyBooks!
                                 ? Icons.bookmark

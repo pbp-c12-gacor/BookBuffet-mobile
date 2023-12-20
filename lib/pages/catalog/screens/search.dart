@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bookbuffet/main.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
 import 'package:bookbuffet/pages/catalog/widgets/search_book_card.dart';

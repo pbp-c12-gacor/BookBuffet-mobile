@@ -14,7 +14,8 @@ class Ratings extends StatelessWidget {
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           List<Rating> ratings = snapshot.data!;
           return SizedBox(
-            height: 200,
+            height: 170,
+            width: MediaQuery.of(context).size.width - 100,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: ratings.length,
