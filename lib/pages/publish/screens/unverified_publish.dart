@@ -1,3 +1,4 @@
+import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/publish/models/publish.dart';
 import 'package:bookbuffet/pages/publish/screens/details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -69,9 +70,18 @@ class _UnverifiedPublishPageState extends State<UnverifiedPublishPage> {
                             right: 16,
                             bottom: 8,
                           ),
-                          child: Card(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: primaryColor,
+                            ),
                             child: ListTile(
-                              title: Text(book.fields.title),
+                              title: Text(
+                                book.fields.title,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               subtitle: FutureBuilder<String>(
                                 future: getUserById(book.fields.user),
                                 builder: (context, userSnapshot) {
