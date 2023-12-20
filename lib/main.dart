@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
           // home: LoginPage(),
           // home: RegisterPage(),
           home: WelcomeScreen(),
+          // home: BasePage(),
           // home: ProfilePage(),
         ));
   }
