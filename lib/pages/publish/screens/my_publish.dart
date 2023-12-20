@@ -1,3 +1,4 @@
+import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/publish/models/publish.dart';
 import 'package:bookbuffet/pages/publish/screens/details.dart';
 import 'package:bookbuffet/pages/publish/screens/main.dart';
@@ -140,6 +141,7 @@ class _MyPublishPageState extends State<MyPublishPage> {
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(8),
+                                        color: primaryColor,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -148,16 +150,14 @@ class _MyPublishPageState extends State<MyPublishPage> {
                                               imageUrl:
                                                   '$baseApiUrl/media/${book.fields.cover}',
                                               fit: BoxFit.cover,
-                                              width:
-                                                  150.0, // Adjust the width as needed
-                                              height:
-                                                  150.0, // Adjust the height as needed
+                                              width: 150.0,
+                                              height: 150.0,
                                               placeholder: (context, url) =>
                                                   const CircularProgressIndicator(),
                                               errorWidget:
                                                   (context, url, error) =>
                                                       const Icon(Icons.error,
-                                                          size: 80.0),
+                                                          size: 150.0),
                                             ),
                                             const SizedBox(height: 8),
                                             Text(
@@ -166,7 +166,7 @@ class _MyPublishPageState extends State<MyPublishPage> {
                                                   : book.fields.title,
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 18,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -175,7 +175,7 @@ class _MyPublishPageState extends State<MyPublishPage> {
                                               textAlign: TextAlign.center,
                                               text: TextSpan(
                                                 style: const TextStyle(
-                                                    fontSize: 12),
+                                                    fontSize: 14),
                                                 children: [
                                                   const TextSpan(
                                                       text: 'Status: '),

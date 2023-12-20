@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-2023/12/20-17:42:35.640 2ef0 Reusing MANIFEST C:\Users\ricar\AppData\Local\Temp\flutter_tools.2e0579f\flutter_tools_chrome_device.dfa8a623\Default\Site Characteristics Database/MANIFEST-000001
-2023/12/20-17:42:35.641 2ef0 Recovering log #6
-2023/12/20-17:42:35.641 2ef0 Reusing old log C:\Users\ricar\AppData\Local\Temp\flutter_tools.2e0579f\flutter_tools_chrome_device.dfa8a623\Default\Site Characteristics Database/000006.log 
-2023/12/20-17:42:35.642 2ef0 Delete type=0 #3
-2023/12/20-17:42:35.642 2ef0 Delete type=2 #4
-2023/12/20-17:42:35.642 2ef0 Delete type=2 #6
-=======
-2023/12/20-16:30:40.379 b403 Creating DB /private/var/folders/3b/rm1pbphs1xg6l_59_v7c4d640000gn/T/flutter_tools.pOFvCc/flutter_tools_chrome_device.AXQp26/Default/Site Characteristics Database since it was missing.
-2023/12/20-16:30:40.775 b403 Reusing MANIFEST /private/var/folders/3b/rm1pbphs1xg6l_59_v7c4d640000gn/T/flutter_tools.pOFvCc/flutter_tools_chrome_device.AXQp26/Default/Site Characteristics Database/MANIFEST-000001
->>>>>>> 8333bc635dc4a4896b4bd9d6ed1e1f1ef12d499d
+2023/12/20-18:57:14.738 4190 Reusing MANIFEST C:\Users\ricar\AppData\Local\Temp\flutter_tools.2025593a\flutter_tools_chrome_device.ec91c549\Default\Site Characteristics Database/MANIFEST-000001
+2023/12/20-18:57:14.741 4190 Recovering log #6
+2023/12/20-18:57:14.741 4190 Reusing old log C:\Users\ricar\AppData\Local\Temp\flutter_tools.2025593a\flutter_tools_chrome_device.ec91c549\Default\Site Characteristics Database/000006.log 
+2023/12/20-18:57:14.742 4190 Delete type=0 #3
+2023/12/20-18:57:14.742 4190 Delete type=2 #4
+2023/12/20-18:57:14.742 4190 Delete type=2 #6
