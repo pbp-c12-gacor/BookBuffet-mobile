@@ -3,8 +3,9 @@ import 'package:bookbuffet/pages/catalog/screens/catalog.dart';
 import 'package:bookbuffet/pages/forum/screens/forum.dart';
 import 'package:bookbuffet/main.dart';
 import 'package:bookbuffet/pages/home/screens/login.dart';
+import 'package:bookbuffet/pages/publish/screens/my_publish.dart';
 import 'package:bookbuffet/pages/report/main.dart';
-import 'package:bookbuffet/pages/publish/main.dart';
+import 'package:bookbuffet/pages/publish/screens/main.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -43,8 +44,10 @@ class MenuCard extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const Catalog()));
           } else if (item.name == "Publish Book") {
             if (request.loggedIn) {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const PublishPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const MyPublishPage()));
             } else {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const LoginPage()));
