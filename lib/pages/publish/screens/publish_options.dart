@@ -58,56 +58,59 @@ class _PublishOptionPageState extends State<PublishOptionPage> {
             } else {
               bool isStaff = snapshot.data ?? false;
 
-              return Padding(
-                padding: const EdgeInsets.only(top: 20.0, right: 16, left: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ProfileMenuWidget(
-                      title: 'Publish a Book',
-                      icon: Icons.publish,
-                      onPress: () {
-                        // Navigate to Publish a Book page
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PublishPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    ProfileMenuWidget(
-                      title: 'My Published Books',
-                      icon: Icons.library_books,
-                      onPress: () {
-                        // Navigate to My Publish page
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyPublishPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    if (isStaff)
+              return SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(top: 20.0, right: 16, left: 16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                       ProfileMenuWidget(
-                        title: 'Verify a Book',
-                        icon: Icons.verified_sharp,
+                        title: 'Publish a Book',
+                        icon: Icons.publish,
                         onPress: () {
-                          // Navigate to Verify a Book page
-                          Navigator.push(
+                          // Navigate to Publish a Book page
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const UnverifiedPublishPage(),
+                              builder: (context) => const PublishPage(),
                             ),
                           );
                         },
                       ),
-                  ],
+                      const SizedBox(height: 10),
+                      ProfileMenuWidget(
+                        title: 'My Published Books',
+                        icon: Icons.library_books,
+                        onPress: () {
+                          // Navigate to My Publish page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MyPublishPage(),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      if (isStaff)
+                        ProfileMenuWidget(
+                          title: 'Verify a Book',
+                          icon: Icons.verified_sharp,
+                          onPress: () {
+                            // Navigate to Verify a Book page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const UnverifiedPublishPage(),
+                              ),
+                            );
+                          },
+                        ),
+                    ],
+                  ),
                 ),
               );
             }
