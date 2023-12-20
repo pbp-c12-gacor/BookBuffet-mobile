@@ -1,8 +1,8 @@
 import 'package:bookbuffet/main.dart';
+import 'package:bookbuffet/pages/forum/screens/my_post.dart';
 import 'package:bookbuffet/pages/home/screens/login.dart';
 import 'package:bookbuffet/pages/home/screens/register.dart';
 import 'package:bookbuffet/pages/profile/models/profile_menu.dart';
-import 'package:bookbuffet/pages/publish/screens/publish_options.dart';
 import 'package:bookbuffet/pages/report/screens/show_reports.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -118,6 +118,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           }),
                       const SizedBox(height: 10),
                       ProfileMenuWidget(
+                          title: "My Post",
+                          icon: Icons.forum_rounded,
+                          onPress: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyForumPage()),
+                            );
+                          }),
+                      const SizedBox(height: 10),
+                      ProfileMenuWidget(
                           title: "Report Book",
                           icon: Icons.report,
                           onPress: () {}),
@@ -126,17 +137,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           title: "My Books", icon: Icons.book, onPress: () {}),
                       const SizedBox(height: 10),
                       ProfileMenuWidget(
-                        title: "Publish Book",
-                        icon: Icons.publish,
-                        onPress: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PublishOptionPage(),
-                            ),
-                          );
-                        },
-                      ),
+                          title: "Publish Book",
+                          icon: Icons.publish,
+                          onPress: () {}),
                       const SizedBox(height: 10),
                       ProfileMenuWidget(
                           title: "Logout",
