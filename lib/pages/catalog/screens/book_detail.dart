@@ -173,7 +173,7 @@ class _BookDetailState extends State<BookDetail> {
                                     widget.book.subtitle == ""
                                         ? const SizedBox.shrink()
                                         : ExpandableText(
-                                            widget.book.subtitle,
+                                            widget.book.subtitle ?? "",
                                             style: const TextStyle(
                                               fontSize: 16,
                                             ),
@@ -272,17 +272,19 @@ class _BookDetailState extends State<BookDetail> {
                                     const SizedBox(
                                       height: 8,
                                     ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        fixedSize: const Size(200, 40),
-                                      ),
-                                      onPressed: () {
-                                        Uri link =
-                                            Uri.parse(widget.book.previewLink);
-                                        launchUrl(link);
-                                      },
-                                      child: const Text('Preview'),
-                                    ),
+                                    widget.book.previewLink != null
+                                        ? ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              fixedSize: const Size(200, 40),
+                                            ),
+                                            onPressed: () {
+                                              Uri link = Uri.parse(
+                                                  widget.book.previewLink!);
+                                              launchUrl(link);
+                                            },
+                                            child: const Text('Preview'),
+                                          )
+                                        : const SizedBox.shrink(),
                                   ])))),
                 ],
               ),
@@ -296,7 +298,7 @@ class _BookDetailState extends State<BookDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ExpandableText(
-                    widget.book.description,
+                    widget.book.description ?? "",
                     style: const TextStyle(
                       fontSize: 16,
                     ),
@@ -351,7 +353,7 @@ class _BookDetailState extends State<BookDetail> {
                       ),
                       children: [
                         TextSpan(
-                          text: widget.book.language.toString().split('.')[1],
+                          text: widget.book.language ?? 'Unknown',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -494,40 +496,3 @@ class _BookDetailState extends State<BookDetail> {
     );
   }
 }
-//         ),
-//                 const Align(
-//                   alignment: Alignment.centerLeft,
-//                   child: Text(
-//                     'Ratings',
-//                     style: TextStyle(
-//                       fontWeight: FontWeight.bold,
-//                       fontSize: 20,
-//                     ),
-//                   ),
-//                 ),
-//                 // Add a list of ratings
-//                 Ratings(ratings: _ratings),
-//                 // Add a header for books by the same authors
-//                 const Align(
-//                   alignment: Alignment.centerLeft,
-//                   child: Text(
-//                     'Books by the same authors',
-//                     style: TextStyle(
-//                       fontWeight: FontWeight.bold,
-//                       fontSize: 20,
-//                     ),
-//                   ),
-//                 ),
-//                 // Add a list of books by the same authors
-//                 BooksByAuthor(
-//                   booksByAuthors: _booksByAuthors,
-//                   authors: widget.book.authors,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

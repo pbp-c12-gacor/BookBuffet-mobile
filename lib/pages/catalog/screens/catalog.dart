@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bookbuffet/pages/catalog/screens/search.dart';
 import 'package:bookbuffet/pages/catalog/models/book.dart';
 import 'package:bookbuffet/pages/catalog/models/category.dart';
 import 'package:bookbuffet/pages/catalog/utils/api_service.dart';
@@ -23,13 +24,13 @@ class _CatalogState extends State<Catalog> {
   @override
   void initState() {
     super.initState();
-    loadData();
     checkForNewBooks();
+    loadData();
   }
 
   void loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //await prefs.clear();
+    // await prefs.clear();
     if (prefs.getString('books') != null) {
       _books = Future.value(List<Book>.from(
           jsonDecode(prefs.getString('books')!).map((x) => Book.fromJson(x))));
@@ -83,24 +84,22 @@ class _CatalogState extends State<Catalog> {
     } else {
       return;
     }
-    int lastBookId = currentBooks.last.id;
-    bool newBooks = true;
 
-    while (newBooks) {
-      lastBookId++;
-      try {
-        Book book = await ApiService.getBook(lastBookId);
-        setState(() {
-          _books.then((value) => value.add(book));
-          for (var category in book.categories) {
-            _booksByCategory.then((value) {
-              value[category.id - 1].then((value) => value.add(book));
-            });
-          }
-        });
-      } catch (e) {
-        newBooks = false;
+    int lastBookId = currentBooks.last.id + 1;
+
+    try {
+      Future<bool> isExist = ApiService.checkBook(lastBookId);
+      bool _isExist = await isExist;
+      if (_isExist) {
+        await prefs.clear();
+        _books = ApiService.getBooks();
+        _categories = ApiService.getCategories();
+        _booksByCategory = Future.value([]);
+        _length = 0;
+        loadData();
       }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -151,7 +150,14 @@ class _CatalogState extends State<Catalog> {
                     ),
                     // Add a search button to the app bar
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SearchPage(),
+                          ),
+                        );
+                      },
                       icon: const Icon(Icons.search),
                     ),
                   ],

@@ -164,4 +164,13 @@ class ApiService {
       throw Exception('Failed to load ratings');
     }
   }
+
+  static Future<bool> checkBook(int id) async {
+    final response = await http.get(Uri.parse('$baseApiUrl/books/$id/'));
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
