@@ -115,20 +115,16 @@ class ReviewState extends State<ReviewPage> {
         "book_id": book.pk,
       }),
     );
-  }
+    Navigator.pop(context);
 
-  // Future<Review> getUserReview() async {
-  //   final request = Provider.of<CookieRequest>(context, listen: false);
-  //   var response = await request.get(
-  //       'http://127.0.0.1:8000/MyBooks/show-review/get-reviews-flutter/${book.pk}');
-  //   var data = jsonEncode(response);
-  //   if (response != null) {
-  //     final review = Review.fromJson(data as Map<String, dynamic>);
-  //     return review;
-  //   } else {
-  //     throw Exception('Failed');
-  //   }
-  // }
+    // if (response.statusCode == 200) {
+    // Handle successful response
+    // Optionally, clear the text field and update the state
+    // setState(() {});
+    // } else {
+    //   // Handle error
+    // }
+  }
 
   Future<List<Review>> getReviews() async {
     var url = Uri.parse(
@@ -239,7 +235,7 @@ class ReviewState extends State<ReviewPage> {
             bookUtilsWidgets.add(ElevatedButton(
               style: buttonStyle,
               onPressed: _delete,
-              child: Text('Delete', style: textStyle),
+              child: Text('Delete Your Review', style: textStyle),
             ));
             bookUtilsWidgets.add(const SizedBox(width: 10, height: 50));
           }

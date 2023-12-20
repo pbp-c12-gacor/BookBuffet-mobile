@@ -18,6 +18,13 @@ class MyBooksPage extends StatefulWidget {
 }
 
 class BookPageState extends State<MyBooksPage> {
+  Future<List<MyBook>>? booksFuture;
+  @override
+  void initState() {
+    super.initState();
+    booksFuture = getMyBooks(); // Initialize the future in initState
+  }
+
   Future<List<MyBook>> getMyBooks() async {
     final request = context.watch<CookieRequest>();
     // print(request.jsonData);
@@ -35,35 +42,20 @@ class BookPageState extends State<MyBooksPage> {
     }
   }
 
+  void refreshBooks() {
+    setState(() {
+      booksFuture = getMyBooks(); // Refresh the list of books
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
-    // Future<List<MyBook>> response = request
-    //     .postJson("http://127.0.0.1:8000/MyBooks/get-mybooks/",
-    //         jsonEncode(<String, String>{"Content-Type": "application/json"}))
-    //     .then((value) {
-    //   if (value == null) {
-    //     return [];
-    //   }
-    //   print(response.body);
-    //   var jsonValue = jsonDecode(value);
-    //   List<MyBook> listMyBook = [];
-    //   for (var data in jsonValue) {
-    //     if (data != null) {
-    //       listMyBook.add(MyBook.fromJson(data));
-    //     }
-    //   }
-    //   return listMyBook;
-    // });
 
     return Scaffold(
         appBar: AppBar(
           title: Text('My Books'),
           actions: [
-            // Padding(
-            //   padding: EdgeInsets.only(right: 20.0),
-            //   child: Center(child: Text(' items')),
-            // ),
             IconButton(
               onPressed: () {
                 Navigator.push(
@@ -92,7 +84,11 @@ class BookPageState extends State<MyBooksPage> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: MyBookCard(book: books[index]),
+                      child: MyBookCard(
+                        book: books[index],
+
+                        onBookDeleted: refreshBooks, // Pass the callback here
+                      ),
                     );
                   },
                 );

@@ -2,6 +2,7 @@ import 'package:bookbuffet/pages/MyBooks/models/Mybook.dart';
 import 'package:bookbuffet/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:bookbuffet/pages/MyBooks/models/bookReview.dart';
@@ -15,7 +16,10 @@ import 'dart:convert';
 class MyBookCard extends StatelessWidget {
   final MyBook book;
   late BookReview bookReview;
-  MyBookCard({Key? key, required this.book}) : super(key: key);
+  final Function onBookDeleted; // Add this line
+
+  MyBookCard({Key? key, required this.book, required this.onBookDeleted})
+      : super(key: key); // Modify this line
 
   Future<List<BookReview>> getBook(BuildContext context, int id) async {
     final request = context.watch<CookieRequest>();
@@ -112,24 +116,15 @@ class MyBookCard extends StatelessWidget {
               onPressed: () async {
                 final request =
                     Provider.of<CookieRequest>(context, listen: false);
-                // Implement delete functionality
 
-// String id = posts[index]
-//                 .pk
-//                 .toString();
-                // print(book.pk);
                 final response = await request.postJson(
                   'https://bookbuffet.onrender.com/MyBooks/delete-mybooks-flutter/${book.pk}/',
                   jsonEncode({
                     "book_id": book.pk,
                   }),
                 );
-                // if (response.statusCode == 200) {
+                onBookDeleted();
                 showCustomSnackBar(context, "Book is deleted successfully");
-//               refreshPosts();
-                // } else {
-                //   showCustomSnackBar(context, "Oops, something went wrong");
-                // }
               },
             ),
           ],
