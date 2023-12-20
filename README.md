@@ -8,8 +8,9 @@
     <img alt="License" src="https://img.shields.io/github/license/pbp-c12-gacor/BookBuffet">
     <img alt="Last commit" src="https://img.shields.io/github/last-commit/pbp-c12-gacor/BookBuffet">
     <img alt="Build" src="https://build.appcenter.ms/v0.1/apps/405fd5cd-3914-4304-95c0-df94c8763aca/branches/main/badge">
-  
 </p>
+
+- Link Download App : https://install.appcenter.ms/orgs/kelompok-c12-pbp-cs-ui-2023/apps/book-buffet/distribution_groups/public
 
 # 📖 BookBuffet 📖
 ## 📑 Table of Contents 📑
